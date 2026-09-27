@@ -156,3 +156,25 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  body:has(.desktop-sidebar) .text-button{color:#078b7e}
  body:has(.desktop-sidebar) .photo-grid article,body:has(.desktop-sidebar) .transformation-photo-picker button{background:#f7fafb;color:#102033;border-color:#dbe5e7}
 }
+
+/* Final scenic Transform desktop shell */
+@media(min-width:801px){
+ .desktop-sidebar{padding:0 0 2rem;overflow:hidden}
+ .sidebar-photo{height:235px;background:
+   linear-gradient(180deg,rgba(4,20,28,.04) 45%,#081923 100%),
+   url('/menhelpingeachother.png') center/cover no-repeat}
+ .desktop-sidebar nav{margin:0;padding:.8rem 0}
+ .desktop-sidebar nav button{padding:.95rem 1.55rem}
+ .sidebar-motto{padding:1.3rem 1.55rem}
+ header.member-header{height:158px;min-height:158px;padding:0 2.25rem;align-items:center;overflow:hidden;
+   background:
+    linear-gradient(90deg,rgba(4,20,28,.92) 0%,rgba(7,31,38,.58) 48%,rgba(4,20,28,.78) 100%),
+    url('/nz-mountains-hero.jpg') center 52%/cover no-repeat}
+ header.member-header .header-bar{display:flex!important}
+ header.member-header .brand{display:flex!important;gap:1rem}
+ header.member-header .brand-mark{width:90px;height:66px}
+ header.member-header .brand-copy b{font-size:2rem;letter-spacing:.2em}
+ header.member-header .brand-copy small{display:block;font-size:.58rem;letter-spacing:.2em;color:#fff}
+ header.member-header:after{font-size:1.55rem;margin-left:auto;text-shadow:0 2px 6px #001}
+ body:has(.desktop-sidebar) main{min-height:calc(100vh - 158px)}
+}
