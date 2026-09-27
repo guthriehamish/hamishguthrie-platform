@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="112" fill="#0d1210"/>
+<circle cx="184" cy="170" r="38" fill="#f4f6f5"/>
+<circle cx="270" cy="170" r="38" fill="#55e000"/>
+<path d="M151 220l-34 126h45l22-77 22 77h45l-34-126z" fill="#f4f6f5"/>
+<path d="M237 220l-34 126h45l22-77 22 77h45l-34-126z" fill="#55e000"/>
+<!-- Transform's sweeping journey arrow: broad orbit from lower-left, around the people, rising to upper-right -->
+<path d="M69 323C126 399 284 405 382 314C411 287 430 255 442 219" fill="none" stroke="#9bea21" stroke-width="24" stroke-linecap="round"/>
+<path d="M403 221L466 184L455 257Z" fill="#9bea21"/>
+<path d="M91 311C121 283 147 263 177 247" fill="none" stroke="#9bea21" stroke-width="12" stroke-linecap="round" opacity=".95"/>
+</svg>
