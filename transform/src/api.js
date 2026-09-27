@@ -73,3 +73,20 @@ export async function loadWellbeing(userId) {
   return { food:food.data||[], weighIns:weighIns.data||[], errors }
 
 }
+
+export async function loadMemberDirectory() {
+  return supabase.rpc('transform_member_directory')
+}
+
+export async function requestWorkoutMate(requesterId, mateId) {
+  return supabase.from('transform_workout_mates').upsert(
+    { requester_id:requesterId, mate_id:mateId, status:'pending', updated_at:new Date().toISOString() },
+    { onConflict:'requester_id,mate_id' }
+  )
+}
+
+export async function updateWorkoutMate(id, status) {
+  return supabase.from('transform_workout_mates').update(
+    { status, updated_at:new Date().toISOString() }
+  ).eq('id',id)
+}
