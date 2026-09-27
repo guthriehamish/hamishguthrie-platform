@@ -1,0 +1,10 @@
+{
+  "name": "Transform With Me",
+  "short_name": "Transform",
+  "description": "Consistent. Persistent. Targeted.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d1210",
+  "theme_color": "#0d1210"
+}
