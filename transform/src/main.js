@@ -74,7 +74,7 @@ function bind(){
  document.querySelectorAll('[data-fuel]').forEach(b=>b.onclick=()=>{const d=todayKey();state.fuel[d]??={};state.fuel[d][b.dataset.fuel]=!state.fuel[d][b.dataset.fuel];touchStreak(state);commit()})
  document.querySelector('#water')?.addEventListener('click',()=>{state.hydration++;touchStreak(state);commit()})
  document.querySelector('#save-mate')?.addEventListener('click',()=>{state.mate=document.querySelector('#mate').value.trim();commit()})
- document.querySelector('#save-direction')?.addEventListener('click',()=>{state.direction=document.querySelector('#direction').value.trim();commit()})
+ document.querySelector('#save-direction')?.addEventListener('click',async()=>{state.direction=document.querySelector('#direction').value.trim();if(session)await saveProfileProgress(session.user.id,{direction:state.direction});commit()})
 }
 async function start(){session=await getSession();if(session)await hydrateCloud();if(supabase){supabase.auth.onAuthStateChange(async(_event,s)=>{session=s;if(session)await hydrateCloud();else render()})}render()}
 start()
