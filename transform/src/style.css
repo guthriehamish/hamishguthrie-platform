@@ -82,3 +82,8 @@ footer strong:nth-child(2){color:#c9e86b}
 .live-map-wrap .route-map{width:100%!important;max-width:none;height:min(62vh,520px);min-height:340px;border:0;border-radius:0}
 .live-map-wrap .leaflet-container,.live-map-wrap .leaflet-map-pane{width:100%}
 @media(max-width:520px){.live-map-wrap .route-map{height:52vh;min-height:320px}}
+
+/* Production interaction states */
+button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
+.sync-message{position:sticky;top:78px;z-index:18;max-width:1180px;margin:0 auto;padding:.7rem 1rem;border:1px solid #665b2d;border-radius:0 0 12px 12px;background:#282313;color:#f1e8b7;font-size:.9rem}
+@media(max-width:800px){.sync-message{top:72px;margin:0 .75rem}}
