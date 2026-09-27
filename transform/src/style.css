@@ -100,3 +100,7 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
 .share-options small{display:block;color:#98a49e}
 .share-card>p:last-child{margin:1.2rem 0 0;font-weight:900;letter-spacing:.08em}
 @media(max-width:520px){.route-actions,.share-actions{flex-direction:column}.route-actions button,.share-actions button{width:100%}}
+
+.activity-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 0;border-bottom:1px solid #28342f}
+.activity-row span{display:flex;flex-direction:column;gap:.2rem}.activity-row small{color:#98a49e}.activity-row button{width:auto;flex:0 0 auto}
+@media(max-width:520px){.activity-row{align-items:flex-start}.activity-row button{padding:.45rem .2rem}}
