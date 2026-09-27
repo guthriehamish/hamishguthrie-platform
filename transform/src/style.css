@@ -273,3 +273,27 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  .move-compact{padding:15px 16px}
  .compact-heading{align-items:flex-start}
 }
+
+/* My Journey: keep momentum visible and reveal deeper records on demand. */
+.journey-sections{display:grid;gap:14px;margin-top:16px}
+.journey-panel{border:1px solid var(--line,#294038);border-radius:18px;background:rgba(18,35,29,.72);overflow:hidden}
+.journey-panel>summary{cursor:pointer;list-style:none;padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+.journey-panel>summary::-webkit-details-marker{display:none}
+.journey-panel>summary:after{content:'+';font-size:26px;font-weight:400;opacity:.7}
+.journey-panel[open]>summary:after{content:'−'}
+.journey-panel>summary span{display:flex;flex-direction:column;gap:3px}
+.journey-panel>summary .eyebrow{margin:0 0 3px}
+.journey-panel>summary strong{font-size:1.08rem}
+.journey-panel>summary small{opacity:.66;font-weight:400}
+.journey-panel-body{padding:0 14px 14px}
+.journey-panel-body>.head{display:none}
+.journey-panel-body>section{margin-top:10px}
+.journey-recent>div:not(.compact-heading){display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.journey-recent>div:not(.compact-heading) span{display:flex;flex-direction:column}
+.journey-recent small{opacity:.65}
+.journey-direction h3{margin-bottom:8px}
+@media(max-width:640px){
+ .journey-sections{gap:11px}
+ .journey-panel>summary{padding:15px 16px}
+ .journey-panel-body{padding:0 10px 10px}
+}
