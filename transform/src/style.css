@@ -94,3 +94,9 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
 .share-stats{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
 .share-stats strong{padding:.65rem .8rem;border:1px solid #394940;border-radius:999px}
 .share-options,.share-actions{max-width:760px;margin-left:auto;margin-right:auto}
+
+.share-options label{display:flex;align-items:flex-start;gap:.7rem;padding:.8rem 0;border-bottom:1px solid #28342f}
+.share-options input{width:auto;margin-top:.2rem}
+.share-options small{display:block;color:#98a49e}
+.share-card>p:last-child{margin:1.2rem 0 0;font-weight:900;letter-spacing:.08em}
+@media(max-width:520px){.route-actions,.share-actions{flex-direction:column}.route-actions button,.share-actions button{width:100%}}
