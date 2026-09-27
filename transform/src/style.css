@@ -219,3 +219,13 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  header.member-header .brand-logo-image{content:url('/transparent_logo_transform.png');width:132px;mix-blend-mode:normal}
  header.member-header .brand-wording-image{content:url('/transform_full_logo.png');width:min(500px,39vw);mix-blend-mode:normal}
 }
+
+/* Correct final artwork placement */
+@media(min-width:801px){
+ .desktop-sidebar{display:flex;flex-direction:column}
+ .desktop-sidebar nav{flex:0 0 auto}
+ .sidebar-photo{margin-top:auto;height:330px;background:url('/menhelpingeachother.png') center bottom/contain no-repeat!important}
+ header.member-header{background:linear-gradient(90deg,rgba(2,20,31,.18),rgba(2,20,31,.02) 55%,rgba(2,20,31,.28)),url('/transform-nz-mountains.jpg') center/cover no-repeat!important}
+ header.member-header .brand-logo-image{content:normal!important;width:128px;mix-blend-mode:normal}
+ header.member-header .brand-wording-image{content:normal!important;width:min(440px,35vw);mix-blend-mode:normal}
+}
