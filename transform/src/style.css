@@ -182,3 +182,33 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
 .brand-assets{display:flex;align-items:center;gap:1rem}.brand-logo-image{width:82px;height:auto;display:block}.brand-wording-image{width:min(360px,28vw);height:auto;display:block}
 @media(min-width:801px){header.member-header .brand-assets{display:flex}.sidebar-photo{height:300px;background-position:center}.desktop-sidebar nav{background:#081923e8}.sidebar-motto{position:relative;z-index:1;background:#081923}.member-header .brand{padding:0}.member-header .brand-logo-image{width:105px}.member-header .brand-wording-image{width:min(390px,32vw)}}
 @media(max-width:800px){.brand-logo-image{width:48px}.brand-wording-image{width:190px}}
+
+/* Final mock-up alignment */
+@media(min-width:801px){
+ body:has(.desktop-sidebar){padding-left:230px}
+ .desktop-sidebar{width:230px;padding:0;background:#071b2a}
+ .desktop-sidebar nav{order:1;margin:0;padding:.55rem 0;background:linear-gradient(180deg,#08283a,#071b2a)}
+ .desktop-sidebar nav button{position:relative;padding:.95rem 1.5rem  .95rem 4rem;font-size:1rem;color:#fff}
+ .desktop-sidebar nav button:before{position:absolute;left:1.45rem;top:.82rem;width:1.8rem;text-align:center;font-size:1.35rem}
+ .desktop-sidebar nav button:nth-child(1):before{content:"⌂"}.desktop-sidebar nav button:nth-child(2):before{content:"↟"}.desktop-sidebar nav button:nth-child(3):before{content:"♨"}.desktop-sidebar nav button:nth-child(4):before{content:"▥"}.desktop-sidebar nav button:nth-child(5):before{content:"◫"}.desktop-sidebar nav button:nth-child(6):before{content:"↪"}
+ .desktop-sidebar nav button:hover{background:linear-gradient(90deg,#078f86,#0b5260);border-left-color:#42d5c0}
+ .sidebar-photo{order:2;margin-top:auto;height:270px;background:linear-gradient(180deg,#071b2a00 55%,#071b2a 100%),url('/menhelpingeachother.png') center/cover no-repeat}
+ .sidebar-motto{order:3;margin:0;padding:1rem 1.7rem 2rem;background:#071b2a;font-size:.72rem;letter-spacing:.24em}
+ .sidebar-motto b{color:#43d6d0}.sidebar-motto b:nth-child(2){color:#8ce63d}
+ header.member-header{height:198px;min-height:198px;padding:0 2.3rem;background:
+ linear-gradient(90deg,rgba(2,20,31,.28),rgba(2,20,31,.1) 52%,rgba(2,20,31,.42)),
+ url('/transform-nz-mountains.jpg') center/cover no-repeat,
+ linear-gradient(115deg,#143b43,#234f50 48%,#0b2636)}
+ header.member-header .brand{background:transparent}
+ header.member-header .brand-assets{gap:1.15rem}
+ header.member-header .brand-logo-image{width:132px;mix-blend-mode:screen}
+ header.member-header .brand-wording-image{width:min(440px,35vw);mix-blend-mode:screen}
+ header.member-header:after{content:"A Healthier\A Stronger You";white-space:pre;text-align:center;line-height:1.05;font-size:1.7rem;font-family:cursive;font-weight:500}
+ body:has(.desktop-sidebar) main{padding:2rem 2rem 5rem;min-height:calc(100vh - 198px)}
+ body:has(.desktop-sidebar) .head h1{font-size:clamp(3rem,5vw,4.6rem)}
+ .overview-dashboard{grid-template-columns:1.5fr .72fr .72fr!important}
+ .overview-dashboard .feature{min-height:180px;background:linear-gradient(90deg,#fff 0%,#fff 68%,#edf7f4 100%)}
+ .overview-dashboard .stat{min-height:180px}
+ .overview-dashboard .stat:nth-of-type(4){grid-column:1/2;min-height:145px}
+ .overview-dashboard .stat:nth-of-type(5){grid-column:2/4;min-height:145px}
+}
