@@ -2,13 +2,28 @@ import { supabase } from './supabase.js'
 import { todayKey } from './store.js'
 
 export async function loadCloudState(userId) {
-  const [profile, activities, checkin, mates] = await Promise.all([
-    supabase.from('transform_profiles').select('*').eq('user_id', userId).single(),
+  // A profile is normally created by the auth trigger. maybeSingle() keeps a
+  // brand-new/legacy account from being treated as a cloud failure if that
+  // row has not appeared yet, and the client can safely self-heal it under RLS.
+  let profile = await supabase.from('transform_profiles').select('*').eq('user_id', userId).maybeSingle()
+  if (!profile.error && !profile.data) {
+    profile = await supabase.from('transform_profiles')
+      .upsert({ user_id:userId }, { onConflict:'user_id', ignoreDuplicates:true })
+      .select('*')
+      .maybeSingle()
+  }
+
+  const [activities, checkin, mates] = await Promise.all([
     supabase.from('transform_activities').select('*').eq('user_id', userId).order('activity_date', { ascending:false }).limit(50),
     supabase.from('transform_daily_checkins').select('*').eq('user_id', userId).eq('checkin_date', todayKey()).maybeSingle(),
     supabase.from('transform_workout_mates').select('*').or(`requester_id.eq.${userId},mate_id.eq.${userId}`)
   ])
-  const errors=[profile.error,activities.error,checkin.error,mates.error].filter(Boolean)
+  const errors=[
+    ['profile',profile.error],
+    ['activities',activities.error],
+    ['daily check-in',checkin.error],
+    ['workout mates',mates.error]
+  ].filter(([,error])=>error).map(([source,error])=>({source,error}))
   return { profile:profile.data, activities:activities.data||[], checkin:checkin.data, mates:mates.data||[], errors }
 }
 
