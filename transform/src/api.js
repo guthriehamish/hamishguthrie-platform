@@ -28,3 +28,24 @@ export async function saveProfileProgress(userId, values) {
 export async function saveCheckin(userId, date, values) {
   return supabase.from('transform_daily_checkins').upsert({ user_id:userId, checkin_date:date, ...values, updated_at:new Date().toISOString() })
 }
+
+export async function addFood(userId, item) {
+  return supabase.from('transform_food_log').insert({
+    user_id:userId, eaten_date:item.date, name:item.name, food_group:item.group,
+    portion:item.portion, points:item.points
+  })
+}
+
+export async function saveWeighIn(userId, date, weightKg) {
+  return supabase.from('transform_weigh_ins').upsert({
+    user_id:userId, weigh_date:date, weight_kg:weightKg
+  }, { onConflict:'user_id,weigh_date' })
+}
+
+export async function loadWellbeing(userId) {
+  const [food, weighIns] = await Promise.all([
+    supabase.from('transform_food_log').select('*').eq('user_id',userId).order('eaten_date',{ascending:false}).limit(100),
+    supabase.from('transform_weigh_ins').select('*').eq('user_id',userId).order('weigh_date',{ascending:true}).limit(100)
+  ])
+  return { food:food.data||[], weighIns:weighIns.data||[] }
+}
