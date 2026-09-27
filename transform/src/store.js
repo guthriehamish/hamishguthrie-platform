@@ -11,7 +11,10 @@ const initial = {
   completedWorkouts: [],
   streak: 0,
   lastActiveDate: null,
-  equipment: []
+  equipment: [],
+  foodLog: [],
+  weighIns: [],
+  heightCm: null
 }
 
 export function loadState() {
