@@ -9,7 +9,7 @@ export async function getSession() {
 export async function signUp(email, password, displayName) {
   return supabase.auth.signUp({
     email, password,
-    options: { data: { display_name: displayName } }
+    options: { data: { display_name: displayName }, emailRedirectTo: window.location.origin }
   })
 }
 
