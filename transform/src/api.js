@@ -66,5 +66,10 @@ export async function loadWellbeing(userId) {
     supabase.from('transform_food_log').select('*').eq('user_id',userId).order('eaten_date',{ascending:false}).limit(100),
     supabase.from('transform_weigh_ins').select('*').eq('user_id',userId).order('weigh_date',{ascending:true}).limit(100)
   ])
-  return { food:food.data||[], weighIns:weighIns.data||[], errors:[food.error,weighIns.error].filter(Boolean) }
+  const errors=[
+    ['food log',food.error],
+    ['weigh-ins',weighIns.error]
+  ].filter(([,error])=>error).map(([source,error])=>({source,error}))
+  return { food:food.data||[], weighIns:weighIns.data||[], errors }
+
 }
