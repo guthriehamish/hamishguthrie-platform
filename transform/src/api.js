@@ -14,7 +14,7 @@ export async function loadCloudState(userId) {
   }
 
   const [activities, checkin, mates] = await Promise.all([
-    supabase.from('transform_activities').select('*').eq('user_id', userId).order('activity_date', { ascending:false }).limit(50),
+    supabase.from('transform_activities').select('*').eq('user_id', userId).order('activity_date', { ascending:false }).limit(500),
     supabase.from('transform_daily_checkins').select('*').eq('user_id', userId).eq('checkin_date', todayKey()).maybeSingle(),
     supabase.from('transform_workout_mates').select('*').or(`requester_id.eq.${userId},mate_id.eq.${userId}`)
   ])
@@ -63,8 +63,8 @@ export async function saveWeighIn(userId, date, weightKg) {
 
 export async function loadWellbeing(userId) {
   const [food, weighIns] = await Promise.all([
-    supabase.from('transform_food_log').select('*').eq('user_id',userId).order('eaten_date',{ascending:false}).limit(100),
-    supabase.from('transform_weigh_ins').select('*').eq('user_id',userId).order('weigh_date',{ascending:true}).limit(100)
+    supabase.from('transform_food_log').select('*').eq('user_id',userId).order('eaten_date',{ascending:false}).limit(500),
+    supabase.from('transform_weigh_ins').select('*').eq('user_id',userId).order('weigh_date',{ascending:true}).limit(500)
   ])
   const errors=[
     ['food log',food.error],
