@@ -40,6 +40,15 @@ export async function addActivity(userId, activity) {
   })
 }
 
+export async function updateActivity(userId,id,values) {
+  const allowed={}
+  if(values.name!==undefined)allowed.name=values.name
+  if(values.intensity!==undefined)allowed.intensity=values.intensity
+  if(values.notes!==undefined)allowed.notes=values.notes
+  if(values.metadata!==undefined)allowed.metadata=values.metadata
+  return supabase.from('transform_activities').update(allowed).eq('id',id).eq('user_id',userId).select().single()
+}
+
 export async function saveProfileProgress(userId, values) {
   return supabase.from('transform_profiles').update({ ...values, updated_at:new Date().toISOString() }).eq('user_id',userId)
 }
