@@ -1,8 +1,10 @@
 import './style.css'
 import { workouts, fuelChoices } from './data.js'
 import { loadState, saveState, todayKey, touchStreak } from './store.js'
+import { supabase } from './supabase.js'
+import { getSession, signIn, signUp, signOut } from './auth.js'
 
-let state=loadState(), view='today'
+let state=loadState(), view='today', session=null
 const nav=[['today','Today'],['move','Move'],['fuel','Fuel'],['progress','Progress'],['together','Together'],['direction','My Direction']]
 
 const button=(id,label)=>`<button data-view="${id}">${label}</button>`
@@ -27,8 +29,14 @@ function progress(){
  return head('PROGRESS','Momentum, visible.','Celebrate what you actually did.')+`<section class="progress"><div class="ring" style="--p:${p}"><strong>${p}%</strong></div><div><h2>${n} workouts completed</h2><p>${state.activeMinutes} active minutes · ${state.streak} day streak</p></div></section><section class="badges">${[['First Move',n>=1],['100 Minutes',state.activeMinutes>=100],['Consistent 7',state.streak>=7],['28 Strong',n>=28]].map(([x,e])=>`<article class="${e?'earned':''}"><strong>${x}</strong><span>${e?'Earned':'Still ahead'}</span></article>`).join('')}</section>`}
 function together(){return head('TOGETHER','Better with a mate.','Choose someone in the programme as your workout mate. Your own workout sequence still carries over.')+`<section class="form narrow"><label>Workout mate<input id="mate" value="${state.mate}" placeholder="Choose a member"></label><button id="save-mate">Connect workout mate</button>${state.mate?`<p class="success">Connected with <strong>${state.mate}</strong>.</p>`:''}</section>`}
 function direction(){return head('MY DIRECTION','What are you moving toward?','Private to you. Keep it simple and meaningful.')+`<section class="form narrow"><label>My direction<textarea id="direction" rows="5" placeholder="What would transformation look like for me?">${state.direction}</textarea></label><button id="save-direction">Save my direction</button></section>`}
-function render(){const views={today,move,fuel,progress,together,direction};document.querySelector('#app').innerHTML=layout(views[view]());bind()}
+function authView(){return `<section class="head"><p class="eyebrow">TRANSFORM WITH ME</p><h1>Start where you are.</h1><p>Sign in to keep your transformation progress with you.</p></section><section class="form narrow"><label>Display name<input id="display-name" placeholder="Your name"></label><label>Email<input id="email" type="email" autocomplete="email"></label><label>Password<input id="password" type="password" autocomplete="current-password"></label><div class="auth-actions"><button id="sign-in">Sign in</button><button id="sign-up" class="secondary">Create account</button></div><p id="auth-message" class="hint"></p></section>`}
+function render(){if(supabase&&!session){document.querySelector('#app').innerHTML=layout(authView());bindAuth();return}const views={today,move,fuel,progress,together,direction};document.querySelector('#app').innerHTML=layout(views[view]());bind()}
 function commit(){saveState(state);render()}
+function bindAuth(){
+ const email=()=>document.querySelector('#email').value.trim(), pass=()=>document.querySelector('#password').value, name=()=>document.querySelector('#display-name').value.trim(), msg=document.querySelector('#auth-message')
+ document.querySelector('#sign-in').onclick=async()=>{const {data,error}=await signIn(email(),pass());if(error){msg.textContent=error.message;return}session=data.session;render()}
+ document.querySelector('#sign-up').onclick=async()=>{if(!name()){msg.textContent='Add your display name first.';return}const {data,error}=await signUp(email(),pass(),name());if(error){msg.textContent=error.message;return}session=data.session;msg.textContent=session?'Account created.':'Check your email to confirm your account.';render()}
+}
 function bind(){
  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render();scrollTo(0,0)})
  document.querySelector('#complete')?.addEventListener('click',()=>{const w=workouts[state.workoutIndex%28];state.completedWorkouts.push({id:w.id,date:todayKey()});state.activities.push({name:w.title,minutes:w.minutes,date:todayKey()});state.activeMinutes+=w.minutes;state.workoutIndex=(state.workoutIndex+1)%28;touchStreak(state);commit()})
@@ -38,4 +46,5 @@ function bind(){
  document.querySelector('#save-mate')?.addEventListener('click',()=>{state.mate=document.querySelector('#mate').value.trim();commit()})
  document.querySelector('#save-direction')?.addEventListener('click',()=>{state.direction=document.querySelector('#direction').value.trim();commit()})
 }
-render()
+async function start(){session=await getSession();if(supabase){supabase.auth.onAuthStateChange((_event,s)=>{session=s;render()})}render()}
+start()
