@@ -1,52 +1,41 @@
 import './style.css'
+import { workouts, fuelChoices } from './data.js'
+import { loadState, saveState, todayKey, touchStreak } from './store.js'
 
-const areas = [
-  ['Today', 'Your daily check-in and the next useful action.'],
-  ['Move', 'Workouts, activities and active minutes.'],
-  ['Fuel', 'Simple healthier-choice check-ins.'],
-  ['Progress', 'Goals, streaks, achievements and momentum.'],
-  ['Together', 'Accountability and workout mates.'],
-  ['My Direction', 'Your own transformation focus and goals.']
-]
+let state=loadState(), view='today'
+const nav=[['today','Today'],['move','Move'],['fuel','Fuel'],['progress','Progress'],['together','Together'],['direction','My Direction']]
 
-document.querySelector('#app').innerHTML = `
-  <main>
-    <section class="hero">
-      <p class="eyebrow">TRANSFORM WITH ME</p>
-      <h1>Consistent.<br>Persistent.<br><span>Targeted.</span></h1>
-      <p class="intro">Transformation without perfection. Show up, make the next useful choice, and keep moving.</p>
-      <button id="begin">Begin today</button>
-    </section>
-
-    <section class="panel" id="today">
-      <div class="panel-head">
-        <div>
-          <p class="eyebrow">YOUR PLATFORM</p>
-          <h2>Today</h2>
-        </div>
-        <div class="streak"><strong>Day 1</strong><span>Start where you are</span></div>
-      </div>
-      <div class="grid">
-        ${areas.map(([name, copy]) => `
-          <article class="card">
-            <h3>${name}</h3>
-            <p>${copy}</p>
-            <button class="text-button" data-area="${name}">Open →</button>
-          </article>
-        `).join('')}
-      </div>
-    </section>
-
-    <footer>Join me. Transform. Get results.</footer>
-  </main>
-`
-
-document.querySelector('#begin').addEventListener('click', () => {
-  document.querySelector('#today').scrollIntoView({ behavior: 'smooth' })
-})
-
-document.querySelectorAll('[data-area]').forEach(button => {
-  button.addEventListener('click', () => {
-    alert(`${button.dataset.area} is ready for its engine.`)
-  })
-})
+const button=(id,label)=>`<button data-view="${id}">${label}</button>`
+function layout(body){return `<header><button class="brand" data-view="today">TRANSFORM <small>WITH ME</small></button><nav>${nav.map(x=>button(...x)).join('')}</nav></header><main>${body}</main><footer>Consistent. Persistent. Targeted.</footer>`}
+function head(k,t,p){return `<section class="head"><p class="eyebrow">${k}</p><h1>${t}</h1><p>${p}</p></section>`}
+function today(){
+ const w=workouts[state.workoutIndex%28], f=Object.values(state.fuel[todayKey()]||{}).filter(Boolean).length
+ return head('TODAY','Show up. <span>That counts.</span>','Do what fits today. The aim is consistency, not a perfect scorecard.')+`
+ <section class="dashboard"><article class="feature"><div><p class="eyebrow">NEXT WORKOUT · ${w.id}/28</p><h2>${w.title}</h2><p>${w.focus} · ${w.minutes} min</p></div>${button('move','Go to Move →')}</article>
+ ${[['Active minutes',state.activeMinutes],['Day streak',state.streak],['Healthy choices',f],['Water',state.hydration]].map(x=>`<article class="stat"><strong>${x[1]}</strong><span>${x[0]}</span></article>`).join('')}</section>`}
+function move(){
+ const w=workouts[state.workoutIndex%28]
+ return head('MOVE','Your next move.','Follow the sequence, replace it with another activity, or add extra movement. It all counts.')+`
+ <section class="cols"><article class="feature workout"><div><p class="eyebrow">WORKOUT ${w.id} OF 28</p><h2>${w.title}</h2><p>${w.focus}</p><strong>${w.minutes} minutes</strong></div><button id="complete">Complete workout</button></article>
+ <article class="form"><h3>Log another activity</h3><label>Activity<input id="activity" placeholder="Walk, swim, sport…"></label><label>Active minutes<input id="minutes" type="number" min="1" placeholder="30"></label><button id="log">Add activity</button><p class="hint">Your next workout stays waiting for you.</p></article></section>
+ <section class="history"><h3>Recent movement</h3>${state.activities.length?state.activities.slice(-5).reverse().map(a=>`<div><span>${a.name}</span><strong>${a.minutes} min</strong></div>`).join(''):'<p>Nothing logged yet.</p>'}</section>`}
+function fuel(){
+ const d=state.fuel[todayKey()]||{}
+ return head('FUEL','Choose healthier.','No calorie counting. No judgement. Just notice the choices that move you forward.')+`<section class="choices">${fuelChoices.map(([id,label])=>`<button class="choice ${d[id]?'done':''}" data-fuel="${id}"><strong>${d[id]?'✓':'○'}</strong>${label}</button>`).join('')}<button class="choice water" id="water"><strong>+${state.hydration}</strong>Log a drink of water</button></section>`}
+function progress(){
+ const n=state.completedWorkouts.length,p=Math.round(n/28*100)
+ return head('PROGRESS','Momentum, visible.','Celebrate what you actually did.')+`<section class="progress"><div class="ring" style="--p:${p}"><strong>${p}%</strong></div><div><h2>${n} workouts completed</h2><p>${state.activeMinutes} active minutes · ${state.streak} day streak</p></div></section><section class="badges">${[['First Move',n>=1],['100 Minutes',state.activeMinutes>=100],['Consistent 7',state.streak>=7],['28 Strong',n>=28]].map(([x,e])=>`<article class="${e?'earned':''}"><strong>${x}</strong><span>${e?'Earned':'Still ahead'}</span></article>`).join('')}</section>`}
+function together(){return head('TOGETHER','Better with a mate.','Choose someone in the programme as your workout mate. Your own workout sequence still carries over.')+`<section class="form narrow"><label>Workout mate<input id="mate" value="${state.mate}" placeholder="Choose a member"></label><button id="save-mate">Connect workout mate</button>${state.mate?`<p class="success">Connected with <strong>${state.mate}</strong>.</p>`:''}</section>`}
+function direction(){return head('MY DIRECTION','What are you moving toward?','Private to you. Keep it simple and meaningful.')+`<section class="form narrow"><label>My direction<textarea id="direction" rows="5" placeholder="What would transformation look like for me?">${state.direction}</textarea></label><button id="save-direction">Save my direction</button></section>`}
+function render(){const views={today,move,fuel,progress,together,direction};document.querySelector('#app').innerHTML=layout(views[view]());bind()}
+function commit(){saveState(state);render()}
+function bind(){
+ document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render();scrollTo(0,0)})
+ document.querySelector('#complete')?.addEventListener('click',()=>{const w=workouts[state.workoutIndex%28];state.completedWorkouts.push({id:w.id,date:todayKey()});state.activities.push({name:w.title,minutes:w.minutes,date:todayKey()});state.activeMinutes+=w.minutes;state.workoutIndex=(state.workoutIndex+1)%28;touchStreak(state);commit()})
+ document.querySelector('#log')?.addEventListener('click',()=>{const name=document.querySelector('#activity').value.trim(),minutes=+document.querySelector('#minutes').value;if(!name||minutes<1)return;state.activities.push({name,minutes,date:todayKey()});state.activeMinutes+=minutes;touchStreak(state);commit()})
+ document.querySelectorAll('[data-fuel]').forEach(b=>b.onclick=()=>{const d=todayKey();state.fuel[d]??={};state.fuel[d][b.dataset.fuel]=!state.fuel[d][b.dataset.fuel];touchStreak(state);commit()})
+ document.querySelector('#water')?.addEventListener('click',()=>{state.hydration++;touchStreak(state);commit()})
+ document.querySelector('#save-mate')?.addEventListener('click',()=>{state.mate=document.querySelector('#mate').value.trim();commit()})
+ document.querySelector('#save-direction')?.addEventListener('click',()=>{state.direction=document.querySelector('#direction').value.trim();commit()})
+}
+render()
