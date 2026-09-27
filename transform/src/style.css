@@ -245,3 +245,31 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
 .private-route-canvas .leaflet-map-pane,
 .private-route-canvas .leaflet-overlay-pane { background: transparent !important; }
 .private-route-canvas .leaflet-control-container { display:none !important; }
+
+/* Compact Move UX: primary actions first, detail on demand. */
+.move-stack{display:grid;gap:16px}
+.move-stack>article,.move-stack>section,.move-stack>details{margin:0}
+.move-quick-actions{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.move-quick-actions button{min-width:0;padding:11px 6px}
+.move-details{border:1px solid var(--line,#294038);border-radius:18px;background:rgba(18,35,29,.72);overflow:hidden}
+.move-details>summary{cursor:pointer;list-style:none;padding:18px 20px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.move-details>summary::-webkit-details-marker{display:none}
+.move-details>summary:after{content:'+';font-size:24px;font-weight:400;opacity:.75}
+.move-details[open]>summary:after{content:'−'}
+.move-details>summary span{display:flex;flex-direction:column;gap:3px}
+.move-details>summary small{font-weight:400;opacity:.65}
+.move-details .details-body{padding:0 20px 20px}
+.move-details .exercise-list{padding:0 16px 16px}
+.compact-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.compact-heading h3,.compact-heading p{margin-top:0}
+.compact-count{white-space:nowrap;font-size:.82rem;opacity:.72}
+.move-compact{padding-top:18px;padding-bottom:18px}
+.move-compact .text-button{width:auto;margin:0}
+@media(max-width:640px){
+ .move-stack{gap:12px}
+ .move-quick-actions{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .move-quick-actions button{font-size:.82rem;padding:10px 3px}
+ .move-details>summary{padding:15px 16px}
+ .move-compact{padding:15px 16px}
+ .compact-heading{align-items:flex-start}
+}
