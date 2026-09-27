@@ -14,7 +14,8 @@ const initial = {
   equipment: [],
   foodLog: [],
   weighIns: [],
-  heightCm: null
+  heightCm: null,
+  exerciseOverrides: {}
 }
 
 export function loadState() {
