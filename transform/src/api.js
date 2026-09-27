@@ -17,7 +17,9 @@ export async function saveDirection(userId, direction) {
 export async function addActivity(userId, activity) {
   return supabase.from('transform_activities').insert({
     user_id:userId, activity_type:activity.type||'activity', workout_number:activity.workoutNumber||null,
-    name:activity.name, minutes:activity.minutes, activity_date:activity.date
+    name:activity.name, minutes:activity.minutes, activity_date:activity.date,
+    distance_km:activity.distanceKm??null, elevation_gain_m:activity.elevationGain??null,
+    laps:activity.laps??null, intensity:activity.intensity??null, metadata:activity.metadata||{}
   })
 }
 
