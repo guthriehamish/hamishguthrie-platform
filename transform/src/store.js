@@ -1,4 +1,4 @@
-const KEY = 'transform-with-me-v1'
+const KEY = 'transform-with-me-v1'\nlet activeUser = null\nconst storageKey = () => activeUser ? KEY + ':' + activeUser : KEY + ':guest'
 
 const initial = {
   workoutIndex: 0,
@@ -18,13 +18,13 @@ const initial = {
   exerciseOverrides: {}
 }
 
-export function loadState() {
-  try { return { ...initial, ...JSON.parse(localStorage.getItem(KEY) || '{}') } }
-  catch { return { ...initial } }
+export function setStateUser(userId) { activeUser = userId || null }\n\nexport function resetState() { return { ...initial, activities:[], fuel:{}, completedWorkouts:[], equipment:[], foodLog:[], weighIns:[], exerciseOverrides:{} } }\n\nexport function loadState() {
+  try { return { ...initial, ...JSON.parse(localStorage.getItem(storageKey()) || '{}') } }
+  catch { return resetState() }
 }
 
 export function saveState(state) {
-  localStorage.setItem(KEY, JSON.stringify(state))
+  localStorage.setItem(storageKey(), JSON.stringify(state))
 }
 
 export function todayKey() {
