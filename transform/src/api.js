@@ -1,13 +1,15 @@
 import { supabase } from './supabase.js'
+import { todayKey } from './store.js'
 
 export async function loadCloudState(userId) {
   const [profile, activities, checkin, mates] = await Promise.all([
     supabase.from('transform_profiles').select('*').eq('user_id', userId).single(),
     supabase.from('transform_activities').select('*').eq('user_id', userId).order('activity_date', { ascending:false }).limit(50),
-    supabase.from('transform_daily_checkins').select('*').eq('user_id', userId).eq('checkin_date', new Date().toISOString().slice(0,10)).maybeSingle(),
+    supabase.from('transform_daily_checkins').select('*').eq('user_id', userId).eq('checkin_date', todayKey()).maybeSingle(),
     supabase.from('transform_workout_mates').select('*').or(`requester_id.eq.${userId},mate_id.eq.${userId}`)
   ])
-  return { profile:profile.data, activities:activities.data||[], checkin:checkin.data, mates:mates.data||[] }
+  const errors=[profile.error,activities.error,checkin.error,mates.error].filter(Boolean)
+  return { profile:profile.data, activities:activities.data||[], checkin:checkin.data, mates:mates.data||[], errors }
 }
 
 export async function saveDirection(userId, direction) {
@@ -49,5 +51,5 @@ export async function loadWellbeing(userId) {
     supabase.from('transform_food_log').select('*').eq('user_id',userId).order('eaten_date',{ascending:false}).limit(100),
     supabase.from('transform_weigh_ins').select('*').eq('user_id',userId).order('weigh_date',{ascending:true}).limit(100)
   ])
-  return { food:food.data||[], weighIns:weighIns.data||[] }
+  return { food:food.data||[], weighIns:weighIns.data||[], errors:[food.error,weighIns.error].filter(Boolean) }
 }
