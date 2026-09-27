@@ -8,7 +8,7 @@ import { equipmentCatalog, chooseExercise, availableOptions, levelForWorkout, ex
 import { foodGroups, portionOptions, estimatePoints, bmi } from './nutrition.js'
 import { loadCloudState, loadWellbeing, addFood, saveWeighIn, saveProfileProgress, addActivity, saveCheckin, loadMemberDirectory, requestWorkoutMate, updateWorkoutMate } from './api.js'
 
-let state=loadState(), view='today', session=null, timer=null, walker=null, walkStats=null, gpsMode='walk', wakeLock=null, syncMessage='', guideName=null, authMode='signin', publicView='auth', memberDirectory=[], mateRows=[], routeActivity=null, mobileNavOpen=false, installPrompt=null, liveMap=null, liveLine=null, liveMarker=null
+let state=loadState(), view='today', session=null, timer=null, walker=null, walkStats=null, gpsMode='walk', wakeLock=null, syncMessage='', guideName=null, authMode='signin', publicView='auth', memberDirectory=[], mateRows=[], routeActivity=null, mobileNavOpen=false, installPrompt=null, authBusy=false, liveMap=null, liveLine=null, liveMarker=null
 const nav=[['today','Overview'],['move','Move'],['fuel','Fuel'],['setup','Set Up'],['journey','My Journey']]
 
 const button=(id,label)=>`<button data-view="${id}">${label}</button>`
@@ -97,18 +97,18 @@ function bindPublic(){document.querySelector('#vision-link')?.addEventListener('
 function bindAuth(){
  const email=()=>document.querySelector('#email').value.trim(), pass=()=>document.querySelector('#password').value, msg=document.querySelector('#auth-message')
  document.querySelector('#auth-toggle').onclick=()=>{authMode=authMode==='signin'?'signup':'signin';render()}
- document.querySelector('#auth-submit').onclick=async()=>{
-  if(authMode==='signin'){const {data,error}=await signIn(email(),pass());if(error){msg.textContent=error.message;return}session=data.session;if(session)await hydrateCloud();render();return}
+ const submit=document.querySelector('#auth-submit'), run=async()=>{if(authBusy)return;const e=email(),p=pass();if(!e||!p){msg.textContent='Enter your email and password.';return}authBusy=true;submit.disabled=true;submit.textContent=authMode==='signin'?'Signing in…':'Creating account…';try{
+  if(authMode==='signin'){const {data,error}=await signIn(e,p);if(error){msg.textContent='We could not sign you in. Check your details and try again.';return}session=data.session;if(session)await hydrateCloud();render();return}
   const name=document.querySelector('#display-name').value.trim();if(!name){msg.textContent='Add your display name first.';return}
-  const {data,error}=await signUp(email(),pass(),name);if(error){msg.textContent=error.message;return}session=data.session
-  if(session){await hydrateCloud();render()}else msg.textContent='Check your email to confirm your account.'
- }
+  const {data,error}=await signUp(e,p,name);if(error){msg.textContent='We could not create your account. Check your details and try again.';return}session=data.session
+  if(session){await hydrateCloud();render()}else msg.textContent='Account created. Check your email to confirm it, then return here to sign in.'
+ }finally{authBusy=false;if(document.body.contains(submit)){submit.disabled=false;submit.textContent=authMode==='signin'?'Sign in':'Create account'}}};submit.onclick=run;document.querySelector('#password')?.addEventListener('keydown',e=>{if(e.key==='Enter')run()})
 }
 function bindTimer(){document.querySelector('#timer-guide')?.addEventListener('click',()=>{if(timer.tick)clearInterval(timer.tick);if(timer.running)refreshTimer();timer.running=false;timer.endAt=null;releaseWake();guideName=timer.steps[timer.index].name;render()});document.querySelector('#toggle-timer').onclick=runTimer;document.querySelector('#next-step').onclick=()=>{if(timer.tick)clearInterval(timer.tick);timer.running=false;advanceTimer()};document.querySelector('#prev-step').onclick=()=>{if(timer.tick)clearInterval(timer.tick);timer.running=false;advanceTimer(-1)};document.querySelector('#quit-workout').onclick=()=>{if(timer.tick)clearInterval(timer.tick);releaseWake();timer=null;view='move';render()}}
 function bindRoutes(){document.querySelectorAll('[data-route]').forEach(b=>b.onclick=()=>{const gps=(state.activities||[]).filter(a=>a.routePoints?.length>1).slice().reverse();routeActivity=gps[Number(b.dataset.route)];view='route';render();scrollTo(0,0)})}
 function bind(){bindRoutes();document.querySelector('#install-app')?.addEventListener('click',async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;render()});document.querySelector('#menu-toggle')?.addEventListener('click',()=>{mobileNavOpen=!mobileNavOpen;render()});document.querySelectorAll('header nav [data-view]').forEach(b=>b.addEventListener('click',()=>{mobileNavOpen=false}));
  document.querySelector('#sign-out')?.addEventListener('click',async()=>{await signOut();session=null;setStateUser(null);state=resetState();view='today';render()})
- document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render();scrollTo(0,0)})
+ document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{mobileNavOpen=false;view=b.dataset.view;render();scrollTo(0,0)})
  document.querySelectorAll('[data-guide]').forEach(b=>b.onclick=()=>{guideName=b.dataset.guide;render()});document.querySelectorAll('[data-swap]').forEach(b=>b.onclick=()=>{const w=resolveWorkout(workouts[state.workoutIndex%28]),i=+b.dataset.swap,slot=w.exercises[i],opts=availableOptions(slot.category,state.equipment||[],levelForWorkout(w.id));if(opts.length<2)return;const current=opts.findIndex(x=>x.name===slot.name),next=opts[(current+1)%opts.length];state.exerciseOverrides??={};state.exerciseOverrides[`${w.id}:${i}`]=next.name;saveState(state);render()})
  document.querySelector('#auto-progress')?.addEventListener('change',async e=>{state.autoProgress=e.target.checked;saveState(state);if(session)cloudError(await saveProfileProgress(session.user.id,{auto_progress:state.autoProgress}))});document.querySelector('#setup-auto-progress')?.addEventListener('change',async e=>{state.autoProgress=e.target.checked;saveState(state);if(session)cloudError(await saveProfileProgress(session.user.id,{auto_progress:state.autoProgress}));render()});document.querySelector('#start-workout')?.addEventListener('click',()=>startTimer(resolveWorkout(workouts[state.workoutIndex%28])))
  document.querySelectorAll('[data-gps]').forEach(b=>b.addEventListener('click',()=>startGps(b.dataset.gps)))
