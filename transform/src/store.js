@@ -10,7 +10,8 @@ const initial = {
   mate: '',
   completedWorkouts: [],
   streak: 0,
-  lastActiveDate: null
+  lastActiveDate: null,
+  equipment: []
 }
 
 export function loadState() {
