@@ -126,3 +126,33 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  body:has(.desktop-sidebar) footer{margin-left:0}
 }
 @media(max-width:800px){.brand-mark{width:48px;height:36px}.brand-copy b{font-size:1rem}.brand-copy small{display:none}}
+
+/* Premium desktop visual system */
+@media(min-width:801px){
+ body:has(.desktop-sidebar){background:#f5f8fa;color:#102033}
+ .desktop-sidebar{width:245px;background:linear-gradient(180deg,#081923 0%,#0b2230 58%,#081923 100%);box-shadow:12px 0 30px #07151d18}
+ body:has(.desktop-sidebar){padding-left:245px}
+ .desktop-sidebar nav button{font-size:1rem;padding:1rem 1.05rem;border-left:4px solid transparent}
+ .desktop-sidebar nav button:hover{background:linear-gradient(90deg,#0d615f,#0c3540);border-left-color:#c9e86b}
+ header.member-header{height:112px;min-height:112px;background:linear-gradient(90deg,#0b202a,#143b38 48%,#0b202a);border:0;box-shadow:0 2px 12px #0a172022}
+ header.member-header:after{content:"A Healthier • Stronger • You";margin-left:auto;color:#e9f3ef;font-size:1.25rem;font-style:italic;letter-spacing:.06em;opacity:.9}
+ body:has(.desktop-sidebar) main{max-width:none;margin:0;padding:2.25rem 2.25rem 5rem;background:linear-gradient(135deg,#f9fbfc,#edf5f5);min-height:calc(100vh - 112px)}
+ body:has(.desktop-sidebar) .head{padding:0 0 2rem;border-bottom:1px solid #dce5e7;margin-bottom:1.25rem}
+ body:has(.desktop-sidebar) .head .eyebrow{color:#087e74}
+ body:has(.desktop-sidebar) .head h1{font-size:clamp(2.7rem,5vw,4.7rem);color:#102033;margin:.25rem 0 .65rem}
+ body:has(.desktop-sidebar) .head h1 span{color:#078b7e}
+ body:has(.desktop-sidebar) .head>p:last-child{color:#60717b;margin-bottom:0}
+ body:has(.desktop-sidebar) .feature,body:has(.desktop-sidebar) .stat,body:has(.desktop-sidebar) .form,body:has(.desktop-sidebar) .history,body:has(.desktop-sidebar) .progress,body:has(.desktop-sidebar) .badges article,body:has(.desktop-sidebar) .exercise-preview,body:has(.desktop-sidebar) .setup-section,body:has(.desktop-sidebar) .body-summary,body:has(.desktop-sidebar) .weight-chart,body:has(.desktop-sidebar) .progress-summary article,body:has(.desktop-sidebar) .trend-card{background:#fff;color:#102033;border:1px solid #dbe5e7;box-shadow:0 8px 25px #18343d0c}
+ body:has(.desktop-sidebar) .feature p,body:has(.desktop-sidebar) .hint,body:has(.desktop-sidebar) .history p,body:has(.desktop-sidebar) .stat span{color:#60717b}
+ body:has(.desktop-sidebar) .stat strong,body:has(.desktop-sidebar) .points-total strong,body:has(.desktop-sidebar) .progress-summary strong{color:#078b7e}
+ body:has(.desktop-sidebar) .feature button,body:has(.desktop-sidebar) .form button{background:linear-gradient(90deg,#078b7e,#0aa58f);color:white}
+ body:has(.desktop-sidebar) .dashboard{grid-template-columns:1.8fr repeat(2,.85fr);gap:1rem}
+ body:has(.desktop-sidebar) .dashboard .feature{grid-column:span 1}
+ body:has(.desktop-sidebar) .dashboard .stat{min-height:150px}
+ body:has(.desktop-sidebar) footer{background:#081923;color:#fff;border:0}
+ body:has(.desktop-sidebar) footer strong:nth-child(2){color:#c9e86b}
+ body:has(.desktop-sidebar) .eyebrow{color:#078b7e}
+ body:has(.desktop-sidebar) input,body:has(.desktop-sidebar) textarea,body:has(.desktop-sidebar) select{background:#f7fafb;color:#102033;border-color:#cedbdd}
+ body:has(.desktop-sidebar) .text-button{color:#078b7e}
+ body:has(.desktop-sidebar) .photo-grid article,body:has(.desktop-sidebar) .transformation-photo-picker button{background:#f7fafb;color:#102033;border-color:#dbe5e7}
+}
