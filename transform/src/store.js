@@ -5,7 +5,7 @@ const storageKey = () => activeUser ? KEY + ':' + activeUser : KEY + ':guest'
 const initial = {
   workoutIndex: 0, activeMinutes: 0, activities: [], fuel: {}, hydrationByDate: {},
   direction: '', mate: '', completedWorkouts: [], streak: 0, lastActiveDate: null,
-  equipment: [], foodLog: [], weighIns: [], heightCm: null, exerciseOverrides: {}
+  equipment: [], foodLog: [], weighIns: [], heightCm: null, exerciseOverrides: {}, autoProgress: true
 }
 
 export function setStateUser(userId) { activeUser = userId || null }
