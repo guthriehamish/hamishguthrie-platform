@@ -34,3 +34,13 @@ footer strong:nth-child(2){color:#c9e86b}
 .setup-help .eyebrow{margin:0;color:#a9c8b9}
 @media(max-width:850px){.setup-grid{grid-template-columns:1fr}.setup-equipment-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-heading{display:block}.section-heading>p{margin-top:.4rem}}
 @media(max-width:480px){.setup-equipment-grid{grid-template-columns:1fr}.setup-help{align-items:flex-start;flex-direction:column}}
+
+/* Workout mate requests */
+.move-together{overflow:hidden}
+.mate-request{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin:1rem 0;padding:1rem;border:1px solid #394940;border-radius:14px;background:#111814}
+.mate-request>div{display:flex;gap:.5rem}
+.mate-request button,.member-list button{border:0;border-radius:999px;padding:.55rem .8rem;background:#c9e86b;color:#101714;font-weight:850;cursor:pointer}
+.mate-request button.secondary{background:#28342f;color:#f4f6f5;border:1px solid #45564e}
+.member-list{display:grid;gap:.5rem;margin:1rem 0}
+.member-list>div{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1rem;border:1px solid #2b3933;border-radius:12px;background:#111814}
+@media(max-width:480px){.mate-request,.member-list>div{align-items:flex-start;flex-direction:column}}
