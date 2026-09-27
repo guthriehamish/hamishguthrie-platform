@@ -61,3 +61,34 @@ export function chooseExercise(category,equipment=[],seed=0,maxLevel=3){
  return pool[seed%pool.length]
 }
 export function levelForWorkout(workoutId){return workoutId<=7?1:workoutId<=14?2:3}
+
+
+export const exerciseGuides = {
+  'Standing reverse fly': {
+    summary: 'Open your arms out to the sides while standing to work the upper back and rear shoulders.',
+    steps: ['Stand tall with soft knees and brace comfortably.', 'Lean slightly forward from the hips.', 'With soft elbows, open the arms out to the sides.', 'Gently draw the shoulder blades together, then lower with control.'],
+    cues: 'Keep the shoulders down and avoid swinging. Use a comfortable range.',
+    easier: 'Use a smaller range or stay more upright.'
+  },
+  'Hip hinge': {
+    summary: 'Fold from the hips while keeping a long spine, then use the hips to return to standing.',
+    steps: ['Stand with feet about hip-width apart and knees softly bent.', 'Send your hips backward.', 'Allow the torso to tip forward while keeping your back long.', 'Return to standing with control.'],
+    cues: 'Think hips back rather than squat down. Stay within a comfortable range.',
+    easier: 'Use a smaller range and practise with your hands on your hips.'
+  },
+  'Standing knee drive': {
+    summary: 'A controlled standing movement where you lift one knee toward your torso and lower it again.',
+    steps: ['Stand tall with support nearby if needed.', 'Brace gently through your middle.', 'Lift one knee toward your torso without leaning far backward.', 'Lower with control and repeat or alternate sides.'],
+    cues: 'Stay tall and control both the lift and lowering.',
+    easier: 'Lift the knee less high or keep one hand on a wall or sturdy chair.'
+  }
+}
+
+export function exerciseGuide(name, note='') {
+  return exerciseGuides[name] || {
+    summary: name + ' is one of the movements selected for this workout.',
+    steps: ['Set up in a stable, comfortable position.', 'Move slowly through a comfortable range.', 'Keep breathing and stop if the movement does not feel right.'],
+    cues: note || 'Use a controlled, comfortable range.',
+    easier: 'Reduce the range or use Swap to choose another suitable movement.'
+  }
+}
