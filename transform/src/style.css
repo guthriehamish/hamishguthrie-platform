@@ -76,3 +76,9 @@ footer strong:nth-child(2){color:#c9e86b}
  header nav button{width:100%;padding:.75rem 1rem;text-align:left}
  main{padding-top:2rem}
 }
+
+/* GPS map must occupy its entire frame */
+.live-map-wrap{width:100%;padding:0;overflow:hidden;border:1px solid #2b3933;border-radius:22px;background:#101714}
+.live-map-wrap .route-map{width:100%!important;max-width:none;height:min(62vh,520px);min-height:340px;border:0;border-radius:0}
+.live-map-wrap .leaflet-container,.live-map-wrap .leaflet-map-pane{width:100%}
+@media(max-width:520px){.live-map-wrap .route-map{height:52vh;min-height:320px}}
