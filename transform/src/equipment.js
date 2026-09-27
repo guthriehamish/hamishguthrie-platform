@@ -14,6 +14,25 @@ export const exerciseOptions={
   x('Bike steady effort',['bike'],1),x('Bike intervals',['bike'],2),x('Bike resistance effort',['bike'],3),
   x('Cross-trainer steady effort',['elliptical'],1),x('Cross-trainer intervals',['elliptical'],2),x('Cross-trainer resistance effort',['elliptical'],3)
  ],
+ pull:[
+  x('Standing reverse fly',[],1,'Open the chest and squeeze the shoulder blades gently.'),x('Prone arm pull',['mat'],1,'Move slowly and keep the neck relaxed.'),
+  x('Resistance-band row',['bands'],1,'Pull elbows back without shrugging.'),x('Dumbbell row',['dumbbells'],2,'Brace comfortably and draw the elbow toward the hip.'),
+  x('Kettlebell row',['kettlebell'],2,'Keep the movement controlled.'),x('Machine seated row',['weights-machine'],1,'Use a smooth controlled pull.')
+ ],
+ hinge:[
+  x('Hip hinge',[],1,'Push the hips back while keeping the movement comfortable.'),x('Glute bridge',['mat'],1,'Drive through the feet and finish tall through the hips.'),
+  x('Kettlebell deadlift',['kettlebell'],1,'Keep the weight close and move smoothly.'),x('Dumbbell Romanian deadlift',['dumbbells'],2,'Hinge at the hips with a controlled range.'),
+  x('Machine hamstring curl',['weights-machine'],1,'Use a controlled range without swinging.')
+ ],
+ mobility:[
+  x('Shoulder rolls',[],1,'Move gently through a comfortable range.'),x('Standing hip opener',[],1,'Move slowly and stay balanced.'),
+  x('Hamstring sweep',[],1,'Use a comfortable range rather than forcing the stretch.'),x('Thoracic rotation',[],1,'Rotate gently through the upper body.'),
+  x('Cat-cow',['mat'],1,'Move slowly between comfortable positions.'),x('Worlds greatest stretch',['mat'],2,'Take your time and keep the range comfortable.')
+ ],
+ balance:[
+  x('Supported single-leg stand',[],1,'Keep support within reach.'),x('Heel-to-toe walk',[],1,'Move slowly and use support if needed.'),
+  x('Step and hold',[],2,'Pause briefly after each controlled step.')
+ ],
  push:[
   x('Wall push-up',[],1),x('Knee push-up',['mat'],1),x('Incline push-up',['bench'],2),x('Push-up',['mat'],3),
   x('Resistance-band chest press',['bands'],1),x('Dumbbell floor press',['dumbbells','mat'],1),x('Dumbbell press',['dumbbells'],2),
@@ -37,6 +56,8 @@ export function availableOptions(category,equipment=[],maxLevel=3){
 }
 export function chooseExercise(category,equipment=[],seed=0,maxLevel=3){
  const options=availableOptions(category,equipment,maxLevel)
- return options.length?options[seed%options.length]:null
+ if(!options.length)return null
+ const preferred=options.filter(o=>o.level===maxLevel), pool=preferred.length?preferred:options
+ return pool[seed%pool.length]
 }
 export function levelForWorkout(workoutId){return workoutId<=7?1:workoutId<=14?2:3}
