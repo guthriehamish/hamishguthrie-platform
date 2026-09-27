@@ -103,7 +103,7 @@ export async function loadProgressPhotos(userId) {
 
 export async function addProgressPhoto(userId,file,{kind='progress',date=todayKey(),weightKg=null,note=''}={}) {
   const ext=(file.name?.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')
-  const path=userId+'/'+crypto.randomUUID()+'.'+(ext||'jpg')
+  const id=crypto.randomUUID?.()||Date.now()+'-'+Math.random().toString(36).slice(2);const path=userId+'/'+id+'.'+(ext||'jpg')
   const uploaded=await supabase.storage.from('transform-progress-photos').upload(path,file,{upsert:false,contentType:file.type})
   if(uploaded.error)return uploaded
   const row=await supabase.from('transform_progress_photos').insert({user_id:userId,photo_date:date,storage_path:path,kind,weight_kg:weightKg||null,note:note||null}).select().single()
@@ -115,5 +115,5 @@ export async function addProgressPhoto(userId,file,{kind='progress',date=todayKe
 export async function deleteProgressPhoto(row) {
   const file=await supabase.storage.from('transform-progress-photos').remove([row.storage_path])
   if(file.error)return file
-  return supabase.from('transform_progress_photos').delete().eq('id',row.id)
+  return supabase.from('transform_progress_photos').delete().eq('id',row.id).eq('user_id',row.user_id)
 }
