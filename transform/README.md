@@ -67,9 +67,9 @@ The video should explain:
 The public mission video answers **“What am I joining?”** The member welcome video answers **“I’ve joined — how do I use this well?”**
 
 
-## Build status — production hardening (28 September 2026)
+## Build status — acceptance testing (28 September 2026)
 
-Transform With Me is in final production-hardening rather than major feature construction.
+Transform With Me has completed the planned application build and production-hardening pass. The codebase is now frozen for tonight except for defects found during acceptance testing. Do not add new scope before the acceptance pass below.
 
 Operational core:
 - Supabase authentication with production email confirmation.
@@ -95,3 +95,10 @@ Before designating BUILT, complete a real-device end-to-end acceptance pass:
 10. Confirm sign-out leaves no previous member photos/mates/journey visible to the next session.
 
 Known launch-content items rather than architecture blockers: record the public Vision and member Getting Started videos; continue refining the final 28-workout content/exercise-guide copy.
+
+
+### Nightly handoff — 28 September 2026
+
+Final hardening commits completed tonight include branded before/after image sharing, longer cloud history hydration, GPS/share/runtime fixes, refreshed PWA caching, private-session cleanup, offline/reconnect recovery, short-route location privacy and progress-photo validation.
+
+No further feature work is required tonight. The next development action is the real-device acceptance pass above. Only defects found in that pass should interrupt the move to the BUILT designation.
