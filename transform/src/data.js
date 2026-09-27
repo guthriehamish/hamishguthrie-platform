@@ -1,37 +1,32 @@
-export const workouts = [
-  { id: 1, title: 'Foundation', focus: 'Full body', minutes: 20, level: 'Start here' },
-  { id: 2, title: 'Engine', focus: 'Cardio + core', minutes: 22, level: 'Build' },
-  { id: 3, title: 'Strength', focus: 'Upper + lower', minutes: 24, level: 'Build' },
-  { id: 4, title: 'Mobility', focus: 'Movement + recovery', minutes: 18, level: 'Reset' },
-  { id: 5, title: 'Challenge', focus: 'Full body', minutes: 26, level: 'Push' },
-  { id: 6, title: 'Core', focus: 'Core + stability', minutes: 20, level: 'Build' },
-  { id: 7, title: 'Recovery', focus: 'Easy movement', minutes: 15, level: 'Reset' },
-  { id: 8, title: 'Foundation+', focus: 'Full body', minutes: 22, level: 'Build' },
-  { id: 9, title: 'Intervals', focus: 'Cardio', minutes: 24, level: 'Push' },
-  { id: 10, title: 'Strength+', focus: 'Strength', minutes: 26, level: 'Build' },
-  { id: 11, title: 'Mobility+', focus: 'Movement + recovery', minutes: 20, level: 'Reset' },
-  { id: 12, title: 'Endurance', focus: 'Sustained movement', minutes: 28, level: 'Push' },
-  { id: 13, title: 'Core+', focus: 'Core + stability', minutes: 22, level: 'Build' },
-  { id: 14, title: 'Recovery+', focus: 'Easy movement', minutes: 16, level: 'Reset' },
-  { id: 15, title: 'Foundation II', focus: 'Full body', minutes: 24, level: 'Build' },
-  { id: 16, title: 'Engine II', focus: 'Cardio + core', minutes: 26, level: 'Push' },
-  { id: 17, title: 'Strength II', focus: 'Strength', minutes: 28, level: 'Build' },
-  { id: 18, title: 'Mobility II', focus: 'Movement + recovery', minutes: 20, level: 'Reset' },
-  { id: 19, title: 'Challenge II', focus: 'Full body', minutes: 30, level: 'Push' },
-  { id: 20, title: 'Core II', focus: 'Core + stability', minutes: 24, level: 'Build' },
-  { id: 21, title: 'Recovery II', focus: 'Easy movement', minutes: 18, level: 'Reset' },
-  { id: 22, title: 'Foundation III', focus: 'Full body', minutes: 26, level: 'Build' },
-  { id: 23, title: 'Intervals II', focus: 'Cardio', minutes: 28, level: 'Push' },
-  { id: 24, title: 'Strength III', focus: 'Strength', minutes: 30, level: 'Push' },
-  { id: 25, title: 'Mobility III', focus: 'Movement + recovery', minutes: 22, level: 'Reset' },
-  { id: 26, title: 'Endurance II', focus: 'Sustained movement', minutes: 32, level: 'Push' },
-  { id: 27, title: 'Core III', focus: 'Core + stability', minutes: 26, level: 'Build' },
-  { id: 28, title: 'Finish Strong', focus: 'Full body', minutes: 30, level: 'Celebrate' }
+const plans = [
+  ['Foundation','Full body',20,'Start here',['March in place','Bodyweight squat','Wall push-up','Standing knee drive','Glute bridge','Bird dog']],
+  ['Engine','Cardio + core',22,'Build',['Fast march','Step jacks','Mountain climber - elevated','Dead bug','High knees - low impact','Plank shoulder tap']],
+  ['Strength','Upper + lower',24,'Build',['Squat','Incline push-up','Reverse lunge','Hip hinge','Chair tricep press','Glute bridge']],
+  ['Mobility','Movement + recovery',18,'Reset',['Shoulder rolls','Cat-cow','Worlds greatest stretch','Hip opener','Hamstring sweep','Thoracic rotation']],
+  ['Challenge','Full body',26,'Push',['Squat to reach','Step jack','Incline push-up','Alternating lunge','Mountain climber - elevated','Plank']],
+  ['Core','Core + stability',20,'Build',['Dead bug','Bird dog','Glute bridge','Standing knee drive','Side plank - knees','Plank']],
+  ['Recovery','Easy movement',15,'Reset',['Easy march','Shoulder rolls','Hip circles','Hamstring sweep','Calf raise','Full body stretch']]
 ]
-
-export const fuelChoices = [
-  ['healthy-meal', 'I chose a healthier meal'],
-  ['snack', 'I avoided the snacks'],
-  ['drink', 'I chose healthier drinks'],
-  ['fruit-veg', 'I added fruit or vegetables']
+export const workouts = Array.from({length:28},(_,i)=>{
+  const [base,focus,baseMinutes,level,exercises]=plans[i%7]
+  const phase=Math.floor(i/7)
+  const work=phase===0?30:phase===1?35:phase===2?40:45
+  const rest=phase===0?20:phase===1?20:15
+  const rounds=phase===0?2:3
+  return {
+    id:i+1,
+    title: phase ? `${base} ${['','+','II','III'][phase]}` : base,
+    focus, level,
+    minutes: baseMinutes + phase*2,
+    rounds,
+    workSeconds:work,
+    restSeconds:rest,
+    exercises: exercises.map((name,n)=>({name, note:n===0?'Find a sustainable rhythm.':'Quality movement first.'}))
+  }
+})
+export const fuelChoices=[
+ ['healthy-meal','I chose a healthier meal'],
+ ['snack','I avoided the snacks'],
+ ['drink','I chose healthier drinks'],
+ ['fruit-veg','I added fruit or vegetables']
 ]
