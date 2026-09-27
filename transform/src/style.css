@@ -212,3 +212,10 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  .overview-dashboard .stat:nth-of-type(4){grid-column:1/2;min-height:145px}
  .overview-dashboard .stat:nth-of-type(5){grid-column:2/4;min-height:145px}
 }
+
+/* Uploaded final brand assets */
+@media(min-width:801px){
+ header.member-header{background:linear-gradient(90deg,rgba(2,20,31,.38),rgba(2,20,31,.05) 55%,rgba(2,20,31,.38)),url('/transform-nz-mountains.jpg') center/cover no-repeat}
+ header.member-header .brand-logo-image{content:url('/transparent_logo_transform.png');width:132px;mix-blend-mode:normal}
+ header.member-header .brand-wording-image{content:url('/transform_full_logo.png');width:min(500px,39vw);mix-blend-mode:normal}
+}
