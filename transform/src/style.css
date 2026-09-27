@@ -162,14 +162,14 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  .desktop-sidebar{padding:0 0 2rem;overflow:hidden}
  .sidebar-photo{height:235px;background:
    linear-gradient(180deg,rgba(4,20,28,.04) 45%,#081923 100%),
-   url('/menhelpingeachother.png') center/cover no-repeat}
+   linear-gradient(145deg,#16323a 0%,#0a1c27 55%,#07141c 100%)}
  .desktop-sidebar nav{margin:0;padding:.8rem 0}
  .desktop-sidebar nav button{padding:.95rem 1.55rem}
  .sidebar-motto{padding:1.3rem 1.55rem}
  header.member-header{height:158px;min-height:158px;padding:0 2.25rem;align-items:center;overflow:hidden;
    background:
     linear-gradient(90deg,rgba(4,20,28,.92) 0%,rgba(7,31,38,.58) 48%,rgba(4,20,28,.78) 100%),
-    url('/nz-mountains-hero.jpg') center 52%/cover no-repeat}
+    linear-gradient(110deg,#0b2630,#1c4a47 52%,#102b36)}
  header.member-header .header-bar{display:flex!important}
  header.member-header .brand{display:flex!important;gap:1rem}
  header.member-header .brand-mark{width:90px;height:66px}
