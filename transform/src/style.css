@@ -55,3 +55,10 @@ footer strong:nth-child(2){color:#c9e86b}
 .route-stats>div{display:grid;padding:1rem;border:1px solid #2b3933;border-radius:14px;background:#111814}
 .route-stats strong{font-size:1.5rem}.route-stats span{color:#98a49e}
 @media(max-width:520px){.route-stats{grid-template-columns:1fr}.route-row{align-items:flex-start}.route-row span:last-child{text-align:right}}
+
+/* Geographic route maps */
+.route-map{width:100%;height:380px;border:1px solid #2b3933;border-radius:18px;overflow:hidden;background:#101714;z-index:0}
+.live-map-wrap{margin:1rem 0}.live-route-map{height:300px}
+.map-empty{display:grid;place-items:center;min-height:180px;padding:1rem;border:1px solid #2b3933;border-radius:18px;color:#98a49e;background:#101714}
+.leaflet-container{font-family:inherit}
+@media(max-width:520px){.route-map{height:300px}.live-route-map{height:260px}}
