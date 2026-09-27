@@ -90,3 +90,30 @@ export async function updateWorkoutMate(id, status) {
     { status, updated_at:new Date().toISOString() }
   ).eq('id',id)
 }
+
+export async function loadProgressPhotos(userId) {
+  const rows=await supabase.from('transform_progress_photos').select('*').eq('user_id',userId).order('photo_date',{ascending:true})
+  if(rows.error)return rows
+  const data=await Promise.all((rows.data||[]).map(async row=>{
+    const signed=await supabase.storage.from('transform-progress-photos').createSignedUrl(row.storage_path,3600)
+    return {...row,url:signed.data?.signedUrl||null}
+  }))
+  return {data,error:null}
+}
+
+export async function addProgressPhoto(userId,file,{kind='progress',date=todayKey(),weightKg=null,note=''}={}) {
+  const ext=(file.name?.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')
+  const path=userId+'/'+crypto.randomUUID()+'.'+(ext||'jpg')
+  const uploaded=await supabase.storage.from('transform-progress-photos').upload(path,file,{upsert:false,contentType:file.type})
+  if(uploaded.error)return uploaded
+  const row=await supabase.from('transform_progress_photos').insert({user_id:userId,photo_date:date,storage_path:path,kind,weight_kg:weightKg||null,note:note||null}).select().single()
+  if(row.error){await supabase.storage.from('transform-progress-photos').remove([path]);return row}
+  const signed=await supabase.storage.from('transform-progress-photos').createSignedUrl(path,3600)
+  return {data:{...row.data,url:signed.data?.signedUrl||null},error:null}
+}
+
+export async function deleteProgressPhoto(row) {
+  const file=await supabase.storage.from('transform-progress-photos').remove([row.storage_path])
+  if(file.error)return file
+  return supabase.from('transform_progress_photos').delete().eq('id',row.id)
+}
