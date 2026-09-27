@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0d1210" />
   <meta name="description" content="Transform With Me — Consistent. Persistent. Targeted." />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Transform" />
+  <link rel="manifest" href="/manifest.webmanifest" />
   <title>Transform With Me</title>
 </head>
 <body>
   <div id="app"></div>
   <script type="module" src="/src/main.js"></script>
+  <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}))}</script>
 </body>
 </html>
