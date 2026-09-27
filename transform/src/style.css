@@ -87,3 +87,10 @@ footer strong:nth-child(2){color:#c9e86b}
 button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
 .sync-message{position:sticky;top:78px;z-index:18;max-width:1180px;margin:0 auto;padding:.7rem 1rem;border:1px solid #665b2d;border-radius:0 0 12px 12px;background:#282313;color:#f1e8b7;font-size:.9rem}
 @media(max-width:800px){.sync-message{top:72px;margin:0 .75rem}}
+
+.route-actions,.share-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}
+.share-card{max-width:760px;margin:0 auto 1rem;padding:1.6rem;border:1px solid #394940;border-radius:22px;background:#111814;overflow:hidden}
+.share-card h2{font-size:clamp(1.7rem,5vw,2.6rem);margin:.25rem 0 1rem}
+.share-stats{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
+.share-stats strong{padding:.65rem .8rem;border:1px solid #394940;border-radius:999px}
+.share-options,.share-actions{max-width:760px;margin-left:auto;margin-right:auto}
