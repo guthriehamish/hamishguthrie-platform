@@ -36,7 +36,7 @@ export async function addActivity(userId, activity) {
     user_id:userId, activity_type:activity.type||'activity', workout_number:activity.workoutNumber||null,
     name:activity.name, minutes:activity.minutes, activity_date:activity.date,
     distance_km:activity.distanceKm??null, elevation_gain_m:activity.elevationGain??null,
-    laps:activity.laps??null, intensity:activity.intensity??null, metadata:activity.metadata||{}
+    laps:activity.laps??null, intensity:activity.intensity??null, route_points:activity.routePoints||null, metadata:activity.metadata||{}
   })
 }
 
