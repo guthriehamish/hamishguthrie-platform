@@ -4,7 +4,8 @@ alter table public.transform_profiles
   add column if not exists is_admin boolean not null default false,
   add column if not exists is_blocked boolean not null default false,
   add column if not exists blocked_at timestamptz,
-  add column if not exists blocked_reason text;
+  add column if not exists blocked_reason text,
+  add column if not exists must_change_password boolean not null default false;
 
 create or replace function public.is_transform_admin()
 returns boolean language sql stable security definer set search_path=public as $$
@@ -31,9 +32,9 @@ end $$;
 
 -- Blocked accounts cannot pass the member-app gate.
 create or replace function public.transform_access_status()
-returns table(is_admin boolean,is_blocked boolean)
+returns table(is_admin boolean,is_blocked boolean,must_change_password boolean)
 language sql stable security definer set search_path=public as $$
- select coalesce(p.is_admin,false),coalesce(p.is_blocked,false) from public.transform_profiles p where p.user_id=auth.uid();
+ select coalesce(p.is_admin,false),coalesce(p.is_blocked,false),coalesce(p.must_change_password,false) from public.transform_profiles p where p.user_id=auth.uid();
 $$;
 
 grant execute on function public.is_transform_admin() to authenticated;
@@ -44,3 +45,12 @@ grant execute on function public.transform_access_status() to authenticated;
 -- Bootstrap the owner account only. Safe to rerun.
 update public.transform_profiles p set is_admin=true
 from auth.users u where p.user_id=u.id and lower(u.email)=lower('guthrieh@gmail.com');
+
+
+-- Called only after the signed-in member has successfully changed their own password.
+create or replace function public.transform_password_change_complete()
+returns void language plpgsql security definer set search_path=public as $$
+begin
+ update public.transform_profiles set must_change_password=false where user_id=auth.uid();
+end $$;
+grant execute on function public.transform_password_change_complete() to authenticated;
