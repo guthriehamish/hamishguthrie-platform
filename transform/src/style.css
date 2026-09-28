@@ -370,3 +370,12 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  .photo-thumbnail-grid article{padding:7px!important}
  .photo-thumbnail-grid .text-button{font-size:.8rem!important}
 }
+
+/* Share Builder photo selection: checkbox selects, thumbnail previews */
+.transformation-photo-picker .transform-photo-choice{min-width:0;padding:5px;border:1px solid rgba(255,255,255,.16);border-radius:9px;background:#f7fafb;color:#102033}
+.transformation-photo-picker .transform-photo-choice.selected{outline:3px solid #9bea3b;outline-offset:2px}
+.transform-photo-view{display:block!important;width:100%!important;padding:0!important;border:0!important;background:transparent!important}
+.transform-photo-view img{display:block!important;width:100%!important;aspect-ratio:1/1!important;object-fit:cover!important;border-radius:6px!important}
+.transform-photo-choice label{display:flex!important;align-items:center!important;gap:5px!important;margin-top:5px!important;font-size:.75rem!important;cursor:pointer}
+.transform-photo-choice label input{width:18px!important;height:18px!important;min-width:18px!important;margin:0!important}
+.transform-photo-choice label span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
