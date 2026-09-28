@@ -7,7 +7,7 @@ export default {
   const url=new URL(request.url)
   if(url.pathname!=='/api/admin/temporary-password') return env.ASSETS.fetch(request)
   if(request.method!=='POST') return json({error:'Method not allowed'},405)
-  if(!env.SUPABASE_URL||!env.SUPABASE_ANON_KEY||!env.SUPABASE_SERVICE_ROLE_KEY) return json({error:'Server configuration incomplete'},503)
+  if(!env.SUPABASE_URL||!env.SUPABASE_ANON_KEY||!env.SUPABASE_SERVICE_ROLE_KEY){const missing=[];if(!env.SUPABASE_URL)missing.push('SUPABASE_URL');if(!env.SUPABASE_ANON_KEY)missing.push('SUPABASE_ANON_KEY');if(!env.SUPABASE_SERVICE_ROLE_KEY)missing.push('SUPABASE_SERVICE_ROLE_KEY');return json({error:'Server configuration incomplete',detail:'Missing: '+missing.join(', '),stage:'worker-env'},503)}
   const auth=request.headers.get('authorization')||''
   if(!auth.startsWith('Bearer ')) return json({error:'Authentication required'},401)
   const token=auth.slice(7)
