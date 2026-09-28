@@ -395,3 +395,15 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  .share-template .before-after figcaption,
  .transformation-card .before-after figcaption{font-size:.68rem!important}
 }
+
+/* Share card alignment: balanced, centred brand presentation. */
+.share-template .share-brand{justify-content:center!important;text-align:center!important}
+.share-template .share-brand img{margin-left:auto!important;margin-right:auto!important}
+.share-template .share-brand small{width:100%!important;text-align:center!important}
+.share-template>h2,.share-template .share-headline{text-align:center!important}
+.share-template .share-footer{text-align:center!important}
+@media(max-width:640px){
+ .share-template .share-brand{align-items:center!important;flex-direction:column!important}
+ .share-template .share-brand img{margin-left:auto!important;margin-right:auto!important}
+ .share-template .share-brand small{text-align:center!important}
+}
