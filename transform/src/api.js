@@ -149,3 +149,5 @@ export async function sendModeratorNotice(userId,message){return supabase.from('
 export async function markModeratorNoticeRead(id){return supabase.from('transform_moderator_notices').update({read_at:new Date().toISOString()}).eq('id',id)}
 
 export async function sendCommunityAnnouncement(body,allowComments=false){return supabase.rpc('transform_admin_announce',{announcement_body:body,allow_comments:allowComments})}
+
+export async function changeOwnPassword(password){const result=await supabase.auth.updateUser({password});if(result.error)return result;const done=await supabase.rpc('transform_password_change_complete');return done.error?{data:result.data,error:done.error}:result}
