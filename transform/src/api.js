@@ -130,3 +130,20 @@ export async function deleteProgressPhoto(row) {
 export async function loadAccessStatus(){return supabase.rpc('transform_access_status')}
 export async function loadAdminParticipants(){return supabase.rpc('transform_admin_participants')}
 export async function setParticipantBlocked(userId,blocked,reason=''){return supabase.rpc('transform_admin_set_blocked',{target_user:userId,blocked,reason})}
+
+export async function loadCommunity(){
+ const [feed,settings,notices]=await Promise.all([
+  supabase.rpc('transform_community_feed'),
+  supabase.from('transform_community_settings').select('*').eq('id',true).maybeSingle(),
+  supabase.from('transform_moderator_notices').select('*').order('created_at',{ascending:false}).limit(20)
+ ])
+ return {feed:feed.data||[],settings:settings.data||{comments_enabled:true,moderated_posts:false},notices:notices.data||[],errors:[feed.error,settings.error,notices.error].filter(Boolean)}
+}
+export async function createCommunityPost(body){return supabase.rpc('transform_create_community_post',{post_body:body})}
+export async function loadCommunityComments(postIds=[]){if(!postIds.length)return {data:[],error:null};return supabase.from('transform_community_comments').select('*').in('post_id',postIds).order('created_at',{ascending:true})}
+export async function addCommunityComment(postId,userId,body){return supabase.from('transform_community_comments').insert({post_id:postId,user_id:userId,body:body.trim()})}
+export async function updateCommunitySettings(values){return supabase.from('transform_community_settings').update({...values,updated_at:new Date().toISOString()}).eq('id',true)}
+export async function moderateCommunityPost(id,values){return supabase.from('transform_community_posts').update({...values,updated_at:new Date().toISOString()}).eq('id',id)}
+export async function hideCommunityComment(id,hidden=true){return supabase.from('transform_community_comments').update({is_hidden:hidden}).eq('id',id)}
+export async function sendModeratorNotice(userId,message){return supabase.from('transform_moderator_notices').insert({user_id:userId,message:message.trim()})}
+export async function markModeratorNoticeRead(id){return supabase.from('transform_moderator_notices').update({read_at:new Date().toISOString()}).eq('id',id)}
