@@ -151,3 +151,5 @@ export async function markModeratorNoticeRead(id){return supabase.from('transfor
 export async function sendCommunityAnnouncement(body,allowComments=false){return supabase.rpc('transform_admin_announce',{announcement_body:body,allow_comments:allowComments})}
 
 export async function changeOwnPassword(password){const result=await supabase.auth.updateUser({password});if(result.error)return result;const done=await supabase.rpc('transform_password_change_complete');return done.error?{data:result.data,error:done.error}:result}
+
+export async function setTemporaryPassword(userId,password){const {data}=await supabase.auth.getSession();const token=data.session?.access_token;if(!token)return {error:new Error('Not signed in')};const response=await fetch('/api/admin/temporary-password',{method:'POST',headers:{'content-type':'application/json','authorization':'Bearer '+token},body:JSON.stringify({userId,password})});const body=await response.json().catch(()=>({}));return response.ok?{data:body,error:null}:{data:null,error:new Error(body.error||'Temporary password could not be set')}}
