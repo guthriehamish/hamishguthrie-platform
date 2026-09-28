@@ -6,8 +6,7 @@
   "preview_urls": true,
   "main": "./worker.js",
   "vars": {
-    "SUPABASE_URL": "https://efqduhteawepewtvtldi.supabase.co",
-    "SUPABASE_ANON_KEY": "sb_publishable_lv0GGEih9AGhcBeuD_PQpg_yjqoaXjY"
+    "SUPABASE_URL": "https://efqduhteawepewtvtldi.supabase.co"
   },
   "assets": {
     "binding": "ASSETS",
