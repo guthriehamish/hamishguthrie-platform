@@ -379,3 +379,19 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
 .transform-photo-choice label{display:flex!important;align-items:center!important;gap:5px!important;margin-top:5px!important;font-size:.75rem!important;cursor:pointer}
 .transform-photo-choice label input{width:18px!important;height:18px!important;min-width:18px!important;margin:0!important}
 .transform-photo-choice label span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Before/after share cards stay side-by-side at every screen size. */
+.share-template .before-after,
+.transformation-card .before-after{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;align-items:center!important;gap:8px!important}
+.share-template .before-after figure,
+.transformation-card .before-after figure{min-width:0!important}
+.share-template .before-after img,
+.transformation-card .before-after img{width:100%!important;aspect-ratio:4/5!important;height:auto!important;object-fit:cover!important}
+@media(max-width:420px){
+ .share-template .before-after,
+ .transformation-card .before-after{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;gap:5px!important}
+ .share-template .journey-arrow,
+ .transformation-card .journey-arrow{transform:none!important;font-size:1rem!important}
+ .share-template .before-after figcaption,
+ .transformation-card .before-after figcaption{font-size:.68rem!important}
+}
