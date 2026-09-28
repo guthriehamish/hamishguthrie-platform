@@ -4,7 +4,11 @@
   "compatibility_date": "2026-09-25",
   "workers_dev": true,
   "preview_urls": true,
-  "main": "./worker.js",\n  "vars": {\n    "SUPABASE_URL": "https://efqduhteawepewtvtldi.supabase.co",\n    "SUPABASE_ANON_KEY": "sb_publishable_lv0GGEih9AGhcBeuD_PQpg_yjqoaXjY"\n  },
+  "main": "./worker.js",
+  "vars": {
+    "SUPABASE_URL": "https://efqduhteawepewtvtldi.supabase.co",
+    "SUPABASE_ANON_KEY": "sb_publishable_lv0GGEih9AGhcBeuD_PQpg_yjqoaXjY"
+  },
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist",
