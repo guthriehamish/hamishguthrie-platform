@@ -113,3 +113,29 @@ grant select,update on public.transform_community_settings to authenticated;
 grant execute on function public.transform_member_active() to authenticated;
 grant execute on function public.transform_community_feed() to authenticated;
 grant execute on function public.transform_create_community_post(text) to authenticated;
+
+-- Admin announcements are authored through a security-definer function so ordinary members cannot spoof them.
+create or replace function public.transform_admin_announce(announcement_body text, allow_comments boolean default false)
+returns uuid language plpgsql security definer set search_path=public as $$
+declare new_id uuid;
+begin
+ if not public.is_transform_admin() then raise exception 'not authorized'; end if;
+ if nullif(trim(announcement_body),'') is null then raise exception 'announcement cannot be empty'; end if;
+ insert into public.transform_community_posts(user_id,body,status,comments_closed,is_announcement)
+ values(auth.uid(),trim(announcement_body),'published',not allow_comments,true) returning id into new_id;
+ return new_id;
+end $$;
+grant execute on function public.transform_admin_announce(text,boolean) to authenticated;
+
+-- Comments are returned with safe display names rather than exposing member contact information.
+create or replace function public.transform_community_comments_for_posts(post_ids uuid[])
+returns table(id uuid,post_id uuid,user_id uuid,display_name text,body text,is_hidden boolean,created_at timestamptz)
+language sql stable security definer set search_path=public as $$
+ select c.id,c.post_id,c.user_id,coalesce(p.display_name,'Transform member'),c.body,c.is_hidden,c.created_at
+ from public.transform_community_comments c
+ left join public.transform_profiles p on p.user_id=c.user_id
+ where public.transform_member_active() and c.post_id=any(post_ids)
+   and (not c.is_hidden or c.user_id=auth.uid() or public.is_transform_admin())
+ order by c.created_at;
+$$;
+grant execute on function public.transform_community_comments_for_posts(uuid[]) to authenticated;
