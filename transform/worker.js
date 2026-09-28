@@ -27,7 +27,7 @@ export default {
   if(target.user.id===status.user_id) return json({error:'Cannot reset your own administrator password here'},400)
   const {error:updateError}=await admin.auth.admin.updateUserById(userId,{password})
   if(updateError) return json({error:'Supabase Auth rejected the password update',detail:updateError.message,stage:'auth-update'},500)
-  const {error:flagError}=await admin.from('transform_profiles').update({must_change_password:true}).eq('user_id',userId)
+  const {error:flagError}=await member.rpc('transform_admin_require_password_change',{target_user:userId})
   if(flagError) return json({error:'Password changed but required-change flag failed. Resolve before sharing the password.',detail:flagError.message,stage:'profile-flag'},500)
   return json({ok:true})
  }
