@@ -126,3 +126,7 @@ export async function deleteProgressPhoto(row) {
   if(file.error)return file
   return supabase.from('transform_progress_photos').delete().eq('id',row.id).eq('user_id',row.user_id)
 }
+
+export async function loadAccessStatus(){return supabase.rpc('transform_access_status')}
+export async function loadAdminParticipants(){return supabase.rpc('transform_admin_participants')}
+export async function setParticipantBlocked(userId,blocked,reason=''){return supabase.rpc('transform_admin_set_blocked',{target_user:userId,blocked,reason})}
