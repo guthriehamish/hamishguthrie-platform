@@ -18,6 +18,15 @@ export default {
   if(!status?.is_admin) return json({error:'Administrator access required',stage:'access-status'},403)
   let payload
   try{payload=await request.json()}catch{return json({error:'Invalid request'},400)}
+  if(url.pathname==='/api/admin/member'&&request.method==='POST'){
+    const email=String(payload?.email||'').trim().toLowerCase(),password=String(payload?.password||''),displayName=String(payload?.displayName||'').trim(),temporary=payload?.temporary!==false
+    if(!email||!displayName||password.length<8)return json({error:'Name, email and password are required'},400)
+    const admin=createClient(env.SUPABASE_URL,env.SUPABASE_SERVICE_ROLE_KEY,{auth:{persistSession:false,autoRefreshToken:false}})
+    const created=await admin.auth.admin.createUser({email,password,email_confirm:true,user_metadata:{display_name:displayName}})
+    if(created.error)return json({error:'Member could not be created',detail:created.error.message},400)
+    await admin.from('transform_profiles').upsert({user_id:created.data.user.id,display_name:displayName,must_change_password:temporary},{onConflict:'user_id'})
+    return json({ok:true})
+  }
   const userId=payload?.userId,password=String(payload?.password||'')
   if(!userId||password.length<8) return json({error:'Temporary password must be at least 8 characters'},400)
   const admin=createClient(env.SUPABASE_URL,env.SUPABASE_SERVICE_ROLE_KEY,{auth:{persistSession:false,autoRefreshToken:false}})
