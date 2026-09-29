@@ -150,6 +150,9 @@ export async function markModeratorNoticeRead(id){return supabase.from('transfor
 
 export async function sendCommunityAnnouncement(body,allowComments=false){return supabase.rpc('transform_admin_announce',{announcement_body:body,allow_comments:allowComments})}
 
+export async function updateOwnAccount({displayName,email}){const auth=await supabase.auth.updateUser({email,data:{display_name:displayName}});if(auth.error)return auth;const profile=await supabase.from('transform_profiles').update({display_name:displayName,updated_at:new Date().toISOString()}).eq('user_id',auth.data.user.id);return profile.error?{data:auth.data,error:profile.error}:auth}
+export async function verifyAndChangePassword(currentPassword,newPassword){const {data}=await supabase.auth.getUser();const email=data.user?.email;if(!email)return {error:new Error('Account email is unavailable')};const check=await supabase.auth.signInWithPassword({email,password:currentPassword});if(check.error)return {error:new Error('Current password is incorrect')};return changeOwnPassword(newPassword)}
+
 export async function changeOwnPassword(password){const result=await supabase.auth.updateUser({password});if(result.error)return result;const done=await supabase.rpc('transform_password_change_complete');return done.error?{data:result.data,error:done.error}:result}
 
 async function adminMemberRequest(method,payload){const {data}=await supabase.auth.getSession();const token=data.session?.access_token;if(!token)return {error:new Error('Not signed in')};const response=await fetch('/api/admin/member',{method,headers:{'content-type':'application/json','authorization':'Bearer '+token},body:JSON.stringify(payload)});const body=await response.json().catch(()=>({}));return response.ok?{data:body,error:null}:{data:null,error:new Error([body.error,body.detail].filter(Boolean).join(' — ')||('Request failed ('+response.status+')'))}}
