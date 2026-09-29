@@ -131,6 +131,8 @@ export async function loadAccessStatus(){return supabase.rpc('transform_access_s
 export async function loadAdminParticipants(){return supabase.rpc('transform_admin_participants')}
 export async function setParticipantBlocked(userId,blocked,reason=''){return supabase.rpc('transform_admin_set_blocked',{target_user:userId,blocked,reason})}
 
+export async function loadCommunityUnreadCount(){return supabase.rpc('transform_community_unread_count')}
+export async function markCommunityRead(){return supabase.rpc('transform_community_mark_read')}
 export async function loadCommunity(){
  const [feed,settings,notices]=await Promise.all([
   supabase.rpc('transform_community_feed'),
