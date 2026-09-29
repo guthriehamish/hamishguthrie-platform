@@ -407,3 +407,22 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  .share-template .share-brand img{margin-left:auto!important;margin-right:auto!important}
  .share-template .share-brand small{text-align:center!important}
 }
+
+/* Share journey stages + Starting Point accountability */
+.share-journey-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 20px}
+.share-stage{min-width:0;text-align:left!important;padding:18px!important;border-radius:16px!important;background:var(--panel,#12231d)!important;border:1px solid rgba(255,255,255,.12)!important}
+.share-stage strong,.share-stage span,.share-stage small{display:block}
+.share-stage strong{font-size:1.05rem;margin-bottom:5px}
+.share-stage span{font-weight:500;opacity:.82}
+.share-stage small{margin-top:8px;opacity:.58}
+.share-stage.active{outline:2px solid #9bea3b;outline-offset:2px}
+.starting-targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0}
+.starting-targets label:first-child{grid-column:1/-1}
+.starting-targets input,.starting-targets textarea{box-sizing:border-box;width:100%;max-width:100%}
+.starting-photo-picker .transform-photo-choice{max-width:130px}
+@media(max-width:700px){
+ .share-journey-choices{grid-template-columns:1fr}
+ .share-stage{padding:14px!important}
+ .starting-targets{grid-template-columns:1fr}
+ .starting-targets label:first-child{grid-column:auto}
+}
