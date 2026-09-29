@@ -456,3 +456,8 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  outline:3px solid #9bea3b!important;
  outline-offset:3px;
 }
+
+/* Historical weight progress summary */
+.weight-loss-summary{display:flex;flex-direction:column;gap:5px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.14)}
+.weight-loss-summary strong{font-size:1.35rem!important;color:#9bea3b}
+.weight-loss-summary span{font-weight:700}
