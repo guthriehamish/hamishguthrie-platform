@@ -139,3 +139,29 @@ language sql stable security definer set search_path=public as $$
  order by c.created_at;
 $$;
 grant execute on function public.transform_community_comments_for_posts(uuid[]) to authenticated;
+
+
+-- Per-member Community read state and unread badge support.
+create table if not exists public.transform_community_read_state (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  last_read_at timestamptz not null default '1970-01-01 00:00:00+00',
+  updated_at timestamptz not null default now()
+);
+alter table public.transform_community_read_state enable row level security;
+drop policy if exists "members manage own community read state" on public.transform_community_read_state;
+create policy "members manage own community read state" on public.transform_community_read_state for all to authenticated using(user_id=auth.uid()) with check(user_id=auth.uid());
+grant select,insert,update on public.transform_community_read_state to authenticated;
+
+create or replace function public.transform_community_unread_count()
+returns integer language sql stable security definer set search_path=public as $$
+ with r as (select coalesce((select last_read_at from public.transform_community_read_state where user_id=auth.uid()),'1970-01-01'::timestamptz) as since)
+ select (select count(*) from public.transform_community_posts p,r where p.status='published' and p.user_id<>auth.uid() and p.created_at>r.since)
+      +(select count(*) from public.transform_community_comments c join public.transform_community_posts p on p.id=c.post_id,r where not c.is_hidden and c.user_id<>auth.uid() and p.user_id=auth.uid() and c.created_at>r.since)
+      +(select count(*) from public.transform_moderator_notices n,r where n.user_id=auth.uid() and n.created_at>r.since)::integer;
+$$;
+create or replace function public.transform_community_mark_read()
+returns void language sql security definer set search_path=public as $$
+ insert into public.transform_community_read_state(user_id,last_read_at,updated_at) values(auth.uid(),now(),now()) on conflict(user_id) do update set last_read_at=excluded.last_read_at,updated_at=excluded.updated_at;
+$$;
+grant execute on function public.transform_community_unread_count() to authenticated;
+grant execute on function public.transform_community_mark_read() to authenticated;
