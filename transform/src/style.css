@@ -426,3 +426,33 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
  .starting-targets{grid-template-columns:1fr}
  .starting-targets label:first-child{grid-column:auto}
 }
+
+/* Share stage contrast — dark cards need explicit light type */
+.share-journey-choices .share-stage,
+.share-journey-choices .share-stage:visited{
+ color:#f7fbf9!important;
+ -webkit-text-fill-color:#f7fbf9;
+}
+.share-journey-choices .share-stage strong{
+ color:#fff!important;
+ -webkit-text-fill-color:#fff;
+}
+.share-journey-choices .share-stage span{
+ color:#d9e5e3!important;
+ -webkit-text-fill-color:#d9e5e3;
+ opacity:1!important;
+}
+.share-journey-choices .share-stage small{
+ color:#b9cbc5!important;
+ -webkit-text-fill-color:#b9cbc5;
+ opacity:1!important;
+}
+.share-journey-choices .share-stage.active{
+ background:#122b22!important;
+ border-color:#9bea3b!important;
+ box-shadow:inset 0 0 0 1px rgba(155,234,59,.28);
+}
+.share-journey-choices .share-stage:focus-visible{
+ outline:3px solid #9bea3b!important;
+ outline-offset:3px;
+}
