@@ -461,3 +461,7 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
 .weight-loss-summary{display:flex;flex-direction:column;gap:5px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.14)}
 .weight-loss-summary strong{font-size:1.35rem!important;color:#9bea3b}
 .weight-loss-summary span{font-weight:700}
+
+/* Community unread indicator */
+nav button[data-view="community"]{position:relative}
+.nav-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;margin-left:7px;border-radius:999px;background:#d92d20;color:#fff;font-size:11px;font-weight:800;line-height:1;vertical-align:middle;box-shadow:0 0 0 2px rgba(255,255,255,.14)}
