@@ -27,6 +27,16 @@ export default {
     await admin.from('transform_profiles').upsert({user_id:created.data.user.id,display_name:displayName,must_change_password:temporary},{onConflict:'user_id'})
     return json({ok:true})
   }
+  if(url.pathname==='/api/admin/member'&&request.method==='DELETE'){
+    const targetId=String(payload?.userId||'')
+    if(!targetId)return json({error:'Member is required'},400)
+    if(targetId===status.user_id)return json({error:'Cannot delete your own administrator account'},400)
+    const admin=createClient(env.SUPABASE_URL,env.SUPABASE_SERVICE_ROLE_KEY,{auth:{persistSession:false,autoRefreshToken:false}})
+    const removed=await admin.auth.admin.deleteUser(targetId)
+    if(removed.error)return json({error:'Member could not be deleted',detail:removed.error.message},500)
+    return json({ok:true})
+  }
+  if(url.pathname!=='/api/admin/temporary-password')return json({error:'Not found'},404)
   const userId=payload?.userId,password=String(payload?.password||'')
   if(!userId||password.length<8) return json({error:'Temporary password must be at least 8 characters'},400)
   const admin=createClient(env.SUPABASE_URL,env.SUPABASE_SERVICE_ROLE_KEY,{auth:{persistSession:false,autoRefreshToken:false}})
