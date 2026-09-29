@@ -152,4 +152,8 @@ export async function sendCommunityAnnouncement(body,allowComments=false){return
 
 export async function changeOwnPassword(password){const result=await supabase.auth.updateUser({password});if(result.error)return result;const done=await supabase.rpc('transform_password_change_complete');return done.error?{data:result.data,error:done.error}:result}
 
+async function adminMemberRequest(method,payload){const {data}=await supabase.auth.getSession();const token=data.session?.access_token;if(!token)return {error:new Error('Not signed in')};const response=await fetch('/api/admin/member',{method,headers:{'content-type':'application/json','authorization':'Bearer '+token},body:JSON.stringify(payload)});const body=await response.json().catch(()=>({}));return response.ok?{data:body,error:null}:{data:null,error:new Error([body.error,body.detail].filter(Boolean).join(' — ')||('Request failed ('+response.status+')'))}}
+export function createAdminMember(values){return adminMemberRequest('POST',values)}
+export function deleteAdminMember(userId){return adminMemberRequest('DELETE',{userId})}
+
 export async function setTemporaryPassword(userId,password){const {data}=await supabase.auth.getSession();const token=data.session?.access_token;if(!token)return {error:new Error('Not signed in')};const response=await fetch('/api/admin/temporary-password',{method:'POST',headers:{'content-type':'application/json','authorization':'Bearer '+token},body:JSON.stringify({userId,password})});const body=await response.json().catch(()=>({}));return response.ok?{data:body,error:null}:{data:null,error:new Error([body.error,body.detail,body.stage&&'Stage: '+body.stage].filter(Boolean).join(' — ')||('Request failed ('+response.status+')'))}}
