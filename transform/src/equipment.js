@@ -1,8 +1,9 @@
+import { expandedExercises, expandedByName } from './exercise-library.js'
 export const equipmentCatalog=[
  ['mat','Exercise mat'],['dumbbells','Free weights / dumbbells'],['kettlebell','Kettlebell'],['barbell','Barbell / bench press'],
  ['weights-machine','Weights machine'],['bands','Resistance bands'],['rope','Skipping rope'],['bag','Boxing bag'],
  ['treadmill','Treadmill'],['rower','Rowing machine'],['bike','Exercise bike'],['elliptical','Cross-trainer / elliptical'],
- ['bench','Step / bench'],['pool','Swimming pool access']
+ ['bench','Step / bench'],['pool','Swimming pool access'],['pullup-bar','Pull-up bar'],['medicine-ball','Medicine ball'],['sandbag','Sandbag'],['battle-ropes','Battle ropes'],['stair-climber','Stair climber'],['smith-machine','Smith machine']
 ]
 const x=(name,equipment=[],level=1,note='')=>({name,equipment,level,note})
 export const exerciseOptions={
@@ -50,6 +51,8 @@ export const exerciseOptions={
   x('Dumbbell carry',['dumbbells'],2),x('Kettlebell carry',['kettlebell'],2),x('Resistance-band anti-rotation hold',['bands'],2)
  ]
 }
+// Expand every workout category while retaining the original substitutions.
+for(const exercise of expandedExercises){const options=exerciseOptions[exercise.category]||(exerciseOptions[exercise.category]=[]);if(!options.some(option=>option.name.toLowerCase()===exercise.name.toLowerCase()))options.push(x(exercise.name,exercise.equipment,exercise.level,exercise.instructions))}
 export function availableOptions(category,equipment=[],maxLevel=3){
  const owned=new Set(equipment)
  return (exerciseOptions[category]||[]).filter(o=>o.level<=maxLevel&&o.equipment.every(e=>owned.has(e)))
@@ -85,6 +88,8 @@ export const exerciseGuides = {
 }
 
 export function exerciseGuide(name, note='') {
+  const item=expandedByName[name];
+  if(item)return {summary:item.name+' works '+item.muscles.toLowerCase()+'. Suggested target: '+item.target+'.',steps:item.instructions.split('; ').map(step=>step.charAt(0).toUpperCase()+step.slice(1)+'.'),cues:'Move with control, keep breathing, and choose a comfortable effort.',easier:'Use a smaller range, lighter resistance or Swap for an easier alternative.',target:item.target,muscles:item.muscles};
   return exerciseGuides[name] || {
     summary: name + ' is one of the movements selected for this workout.',
     steps: ['Set up in a stable, comfortable position.', 'Move slowly through a comfortable range.', 'Keep breathing and stop if the movement does not feel right.'],
